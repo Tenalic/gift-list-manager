@@ -46,7 +46,7 @@ export default function Navbar() {
               <Link className="nav-link" to="/">Accueil</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/liste">Mes listes</Link>
+              <Link className="nav-link" to="/mes-listes">Mes listes</Link>
             </li>
 
             {/* th:if="${connected}" → on affiche seulement si connecté */}

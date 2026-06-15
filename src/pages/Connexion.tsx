@@ -1,77 +1,22 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+// pages/Connexion.tsx
+// Ce fichier ne contient QUE l'affichage.
+// Analogie Java : c'est ton template Thymeleaf
+
+import { Link } from "react-router-dom";
+import { useConnexion } from "../hooks/useConnexion";
 
 export default function Connexion() {
-  const navigate = useNavigate();
-  const { login } = useAuth();
-
-  // --- États du formulaire de connexion ---
-  // Remplacent les variables Thymeleaf ${erreur} et ${message}
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [erreur, setErreur] = useState("");
-  const [message, setMessage] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  // --- État de la modale ---
-  // Remplace data-bs-toggle="modal" : pas besoin de JS Bootstrap, React gère ça
-  const [showModal, setShowModal] = useState(false);
-  const [emailOublie, setEmailOublie] = useState("");
-  const [messageOublie, setMessageOublie] = useState("");
-
-  // --- Soumission du formulaire de connexion ---
-  // Remplace <form action="/connexion" method="post">
-  const handleConnexion = async (e: React.FormEvent) => {
-    e.preventDefault(); // empêche le rechargement de la page (équivalent du comportement SPA)
-    setErreur("");
-    setMessage("");
-    setLoading(true);
-
-    try {
-      const response = await fetch("/api/connexion", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (response.ok) {
-        login();            // met isConnected = true dans le contexte global
-        navigate("/");      // redirige vers l'accueil
-      } else {
-        // Le serveur a renvoyé une erreur (ex: mauvais mot de passe)
-        const data = await response.json();
-        setErreur(data.erreur || "Email ou mot de passe incorrect.");
-      }
-    } catch {
-      setErreur("Impossible de contacter le serveur. Veuillez réessayer.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // --- Soumission du formulaire mot de passe oublié ---
-  const handleMotDePasseOublie = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setMessageOublie("");
-
-    try {
-      const response = await fetch("/api/mot-de-passe-oublie", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: emailOublie }),
-      });
-
-      if (response.ok) {
-        setMessageOublie("Un email de réinitialisation a été envoyé.");
-        setEmailOublie("");
-      } else {
-        setMessageOublie("Aucun compte trouvé avec cet email.");
-      }
-    } catch {
-      setMessageOublie("Impossible de contacter le serveur.");
-    }
-  };
+  // Une seule ligne pour récupérer tout ce dont on a besoin
+  const {
+    email, setEmail,
+    password, setPassword,
+    erreur, message, loading,
+    handleConnexion,
+    showModal, setShowModal,
+    emailOublie, setEmailOublie,
+    messageOublie,
+    handleMotDePasseOublie,
+  } = useConnexion();
 
   return (
     <main className="container py-5">
@@ -108,24 +53,11 @@ export default function Connexion() {
                   />
                 </div>
 
-                {/* th:if="${erreur}" → affiché seulement si erreur non vide */}
-                {erreur && (
-                  <p className="alert alert-danger">{erreur}</p>
-                )}
-
-                {/* th:if="${message}" → affiché seulement si message non vide */}
-                {message && (
-                  <div className="alert alert-primary text-center" role="alert">
-                    {message}
-                  </div>
-                )}
+                {erreur && <p className="alert alert-danger">{erreur}</p>}
+                {message && <div className="alert alert-primary text-center">{message}</div>}
 
                 <div className="text-center">
-                  <button
-                    type="submit"
-                    className="btn btn-success"
-                    disabled={loading}
-                  >
+                  <button type="submit" className="btn btn-success" disabled={loading}>
                     {loading ? "Connexion..." : "Se connecter"}
                   </button>
                 </div>
@@ -133,7 +65,6 @@ export default function Connexion() {
             </div>
 
             <div className="card-footer text-center">
-              {/* Remplace data-bs-toggle="modal" : on passe showModal à true */}
               <button
                 className="btn btn-link text-decoration-none p-0"
                 onClick={() => setShowModal(true)}
@@ -149,35 +80,21 @@ export default function Connexion() {
         </div>
       </div>
 
-      {/* --- Modale mot de passe oublié --- */}
-      {/* Remplace la modale Bootstrap JS par du JSX conditionnel */}
+      {/* Modale mot de passe oublié */}
       {showModal && (
         <>
-          {/* Fond semi-transparent derrière la modale */}
-          <div
-            className="modal-backdrop fade show"
-            onClick={() => setShowModal(false)}
-          />
-
+          <div className="modal-backdrop fade show" onClick={() => setShowModal(false)} />
           <div className="modal fade show d-block" tabIndex={-1} role="dialog">
             <div className="modal-dialog" role="document">
               <div className="modal-content">
                 <div className="modal-header">
                   <h5 className="modal-title">Mot de passe oublié</h5>
-                  <button
-                    type="button"
-                    className="btn-close"
-                    aria-label="Fermer"
-                    onClick={() => setShowModal(false)}
-                  />
+                  <button type="button" className="btn-close" aria-label="Fermer" onClick={() => setShowModal(false)} />
                 </div>
-
                 <form onSubmit={handleMotDePasseOublie}>
                   <div className="modal-body">
                     <div className="mb-3">
-                      <label htmlFor="emailForgot" className="form-label">
-                        Saisissez votre email
-                      </label>
+                      <label htmlFor="emailForgot" className="form-label">Saisissez votre email</label>
                       <input
                         type="email"
                         id="emailForgot"
@@ -187,22 +104,11 @@ export default function Connexion() {
                         required
                       />
                     </div>
-                    {messageOublie && (
-                      <p className="alert alert-info">{messageOublie}</p>
-                    )}
+                    {messageOublie && <p className="alert alert-info">{messageOublie}</p>}
                   </div>
-
                   <div className="modal-footer">
-                    <button type="submit" className="btn btn-primary">
-                      Envoyer
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-secondary"
-                      onClick={() => setShowModal(false)}
-                    >
-                      Annuler
-                    </button>
+                    <button type="submit" className="btn btn-primary">Envoyer</button>
+                    <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Annuler</button>
                   </div>
                 </form>
               </div>
