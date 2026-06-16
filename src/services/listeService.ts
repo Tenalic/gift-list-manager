@@ -7,85 +7,87 @@ export interface MesListesResponse {
   favoris: ListeDto[];
 }
 
+// Helper pour les headers communs
+const getHeaders = () => ({
+  "Content-Type": "application/json",
+  "Accept-Language": navigator.language.split("-")[0]
+});
+
 export const listeService = {
-  // GET /api/liste/mes-listes
   async getMesListes(): Promise<MesListesResponse> {
     const response = await fetch("/api/liste/mes-listes", {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept-Language": "fr"
-      },
+      headers: getHeaders(),
     });
-
-    if (!response.ok) {
-      throw new Error(`Erreur lors de la récupération des listes (${response.status})`);
-    }
-
+    if (!response.ok) throw new Error(`Erreur (${response.status})`);
     return response.json();
   },
 
-  // GET /api/liste/{id}
+  async creerListe(nomListe: string): Promise<void> {
+    const response = await fetch("/api/liste/creer", {
+      method: "POST",
+      headers: getHeaders(),
+      body: JSON.stringify({ nomListe }),
+    });
+    if (!response.ok) throw new Error("Erreur lors de la création");
+  },
+
+  async supprimerListe(idListe: number): Promise<void> {
+    const response = await fetch(`/api/liste/${idListe}`, {
+      method: "DELETE",
+      headers: { "Accept-Language": navigator.language.split("-")[0] }
+    });
+    if (!response.ok) throw new Error("Erreur lors de la suppression");
+  },
+
   async getUneListe(idListe: number): Promise<DetailListeDto> {
     const response = await fetch(`/api/liste/${idListe}`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept-Language": "fr"
-      },
+      headers: getHeaders(),
     });
-
-    if (!response.ok) {
-      throw new Error(`Erreur lors de la récupération de la liste (${response.status})`);
-    }
-
+    if (!response.ok) throw new Error("Erreur de récupération");
     return response.json();
   },
 
-  // POST /api/liste/{id}/cadeau
   async ajouterCadeau(idListe: number, objet: CadeauDto): Promise<void> {
     const response = await fetch(`/api/liste/${idListe}/cadeau`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: getHeaders(),
       body: JSON.stringify(objet),
     });
-    if (!response.ok) throw new Error("Erreur lors de l'ajout du cadeau");
+    if (!response.ok) throw new Error("Erreur lors de l'ajout");
   },
 
-  // PUT /api/cadeau/{id}
   async modifierCadeau(objet: CadeauDto): Promise<void> {
     const response = await fetch(`/api/cadeau/${objet.idObjet}`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept-Language": "fr"
-      },
+      headers: getHeaders(),
       body: JSON.stringify(objet),
     });
-    if (!response.ok) throw new Error("Erreur lors de la modification du cadeau");
+    if (!response.ok) throw new Error("Erreur de modification");
   },
 
-  // DELETE /api/cadeau/{id}
   async supprimerCadeau(idObjet: number): Promise<void> {
     const response = await fetch(`/api/cadeau/${idObjet}`, {
       method: "DELETE",
+      headers: { "Accept-Language": navigator.language.split("-")[0] }
     });
-    if (!response.ok) throw new Error("Erreur lors de la suppression du cadeau");
+    if (!response.ok) throw new Error("Erreur de suppression");
   },
 
-  // POST /api/liste/{id}/favoris
   async toggleFavoris(idListe: number): Promise<void> {
     const response = await fetch(`/api/liste/${idListe}/favoris`, {
       method: "POST",
+      headers: { "Accept-Language": navigator.language.split("-")[0] }
     });
-    if (!response.ok) throw new Error("Erreur lors de la modification des favoris");
+    if (!response.ok) throw new Error("Erreur favoris");
   },
 
-  // POST /api/cadeau/{id}/offrir
   async toggleOffrirCadeau(idObjet: number): Promise<void> {
     const response = await fetch(`/api/cadeau/${idObjet}/offrir`, {
       method: "POST",
+      headers: { "Accept-Language": navigator.language.split("-")[0] }
     });
-    if (!response.ok) throw new Error("Erreur lors de l'action offrir");
+    if (!response.ok) throw new Error("Erreur action offrir");
   },
 };

@@ -35,7 +35,7 @@ export const authService = {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
-          "Accept-Language": "fr"
+          "Accept-Language": navigator.language.split("-")[0]
         },
         body: JSON.stringify(data),
       });
@@ -80,7 +80,7 @@ export const authService = {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
-          "Accept-Language": "fr"
+          "Accept-Language": navigator.language.split("-")[0]
         },
         body: JSON.stringify(data),
       });
