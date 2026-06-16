@@ -1,55 +1,14 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { authService } from "../services/authService";
-import { useAuth } from "../context/AuthContext";
+import { Link } from "react-router-dom";
+import { useInscription } from "../hooks/useInscription";
 
 export default function Inscription() {
-  const navigate = useNavigate();
-  const { login } = useAuth();
-  
-  const [formData, setFormData] = useState({
-    pseudo: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    acceptCGU: false
-  });
-  
-  const [loading, setLoading] = useState(false);
-  const [erreur, setErreur] = useState("");
-
-  const handleSubmit = async (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    setErreur("");
-
-    if (formData.password !== formData.confirmPassword) {
-      setErreur("Les mots de passe ne correspondent pas.");
-      return;
-    }
-
-    if (!formData.acceptCGU) {
-      setErreur("Vous devez accepter les CGU pour vous inscrire.");
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const result = await authService.inscription(formData);
-      if (result.erreur) {
-        setErreur(result.erreur);
-      } else {
-        // En cas de succès, on peut soit rediriger vers connexion,
-        // soit connecter l'utilisateur directement si ton API le permet.
-        // Ici, on redirige vers l'accueil après avoir mis à jour l'état local.
-        login();
-        navigate("/");
-      }
-    } catch (err) {
-      setErreur("Une erreur technique est survenue.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {
+    formData,
+    loading,
+    erreur,
+    handleSubmit,
+    handleInputChange
+  } = useInscription();
 
   return (
     <main className="container py-5">
@@ -74,7 +33,7 @@ export default function Inscription() {
                     className="form-control"
                     required
                     value={formData.pseudo}
-                    onChange={(e) => setFormData({ ...formData, pseudo: e.target.value })}
+                    onChange={(e) => handleInputChange("pseudo", e.target.value)}
                     placeholder="Votre nom d'utilisateur"
                   />
                 </div>
@@ -86,7 +45,7 @@ export default function Inscription() {
                     className="form-control"
                     required
                     value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    onChange={(e) => handleInputChange("email", e.target.value)}
                     placeholder="exemple@email.com"
                   />
                 </div>
@@ -98,7 +57,7 @@ export default function Inscription() {
                     className="form-control"
                     required
                     value={formData.password}
-                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    onChange={(e) => handleInputChange("password", e.target.value)}
                   />
                 </div>
 
@@ -109,7 +68,7 @@ export default function Inscription() {
                     className="form-control"
                     required
                     value={formData.confirmPassword}
-                    onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                    onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
                   />
                 </div>
 
@@ -120,7 +79,7 @@ export default function Inscription() {
                     id="acceptCGU"
                     required
                     checked={formData.acceptCGU}
-                    onChange={(e) => setFormData({ ...formData, acceptCGU: e.target.checked })}
+                    onChange={(e) => handleInputChange("acceptCGU", e.target.checked)}
                   />
                   <label className="form-check-label" htmlFor="acceptCGU">
                     J'accepte les <Link to="/cgu" target="_blank" rel="noopener noreferrer">CGU</Link>
