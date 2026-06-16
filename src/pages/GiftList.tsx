@@ -2,9 +2,32 @@
 
 import { Link } from "react-router-dom";
 import { useListes } from "../hooks/useListes";
+import { useAuth } from "../context/AuthContext";
 
 export default function GiftList() {
+  const { isConnected } = useAuth();
   const { listes, favoris, loading, erreur } = useListes();
+
+  if (!isConnected) {
+    return (
+      <main className="container py-5 text-center">
+        <div className="card p-5 shadow-sm border-0 bg-transparent">
+          <h1 className="mb-4">Mes Listes de Cadeaux</h1>
+          <p className="lead mb-4 opacity-75">
+            Connectez-vous pour créer, gérer et partager vos listes de cadeaux avec vos proches.
+          </p>
+          <div className="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <Link to="/connexion" className="btn btn-primary btn-lg px-4 gap-3">
+              Se connecter
+            </Link>
+            <Link to="/inscription" className="btn btn-outline-secondary btn-lg px-4">
+              Créer un compte
+            </Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   if (loading) return (
     <div className="container py-5 text-center">
@@ -57,8 +80,8 @@ export default function GiftList() {
         </div>
         
         {listes.length === 0 ? (
-          <div className="card p-4 text-center bg-light">
-            <p className="mb-0">Vous n'avez pas encore créé de liste.</p>
+          <div className="card p-4 text-center">
+            <p className="mb-0 opacity-75">Vous n'avez pas encore créé de liste.</p>
           </div>
         ) : (
           <div className="row row-cols-1 row-cols-md-3 g-4">

@@ -1,4 +1,4 @@
-import type { ListeDto, DetailListeDto, ObjetDto } from "../types/liste";
+import type { ListeDto, DetailListeDto, CadeauDto } from "../types/liste";
 
 export interface MesListesResponse {
   messageRetour?: string;
@@ -43,7 +43,7 @@ export const listeService = {
   },
 
   // POST /api/liste/{id}/cadeau
-  async ajouterCadeau(idListe: number, objet: ObjetDto): Promise<void> {
+  async ajouterCadeau(idListe: number, objet: CadeauDto): Promise<void> {
     const response = await fetch(`/api/liste/${idListe}/cadeau`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -53,10 +53,13 @@ export const listeService = {
   },
 
   // PUT /api/cadeau/{id}
-  async modifierCadeau(objet: ObjetDto): Promise<void> {
+  async modifierCadeau(objet: CadeauDto): Promise<void> {
     const response = await fetch(`/api/cadeau/${objet.idObjet}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Accept-Language": "fr"
+      },
       body: JSON.stringify(objet),
     });
     if (!response.ok) throw new Error("Erreur lors de la modification du cadeau");

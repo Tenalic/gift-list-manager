@@ -36,7 +36,7 @@ export function useConnexion() {
         setErreur(result.erreur);
       } else {
         login();
-        navigate("/");
+        navigate("/mes-listes");
       }
     } catch {
       setErreur("Impossible de contacter le serveur. Veuillez réessayer.");

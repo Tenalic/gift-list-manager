@@ -17,6 +17,14 @@ export interface MotDePasseOublieRequest {
   email: string;
 }
 
+export interface InscriptionRequest {
+  pseudo: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  acceptCGU: boolean;
+}
+
 // --- Appels API ---
 export const authService = {
 
@@ -63,5 +71,40 @@ export const authService = {
     }
 
     return { message: "Un email de réinitialisation a été envoyé." };
+  },
+
+  // POST /api/compte/inscription
+  async inscription(data: InscriptionRequest): Promise<ConnexionResponse> {
+    try {
+      const response = await fetch("/api/compte/inscription", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Accept-Language": "fr"
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        try {
+          const err = await response.json();
+          return { erreur: err.erreur || err.messageRetour || "Une erreur est survenue lors de l'inscription." };
+        } catch {
+          return { erreur: "Erreur serveur lors de l'inscription." };
+        }
+      }
+
+      return {};
+    } catch (error) {
+      console.error("Erreur d'inscription:", error);
+      throw error;
+    }
+  },
+
+  // POST /api/compte/deconnexion
+  async deconnexion(): Promise<void> {
+    await fetch("/api/compte/deconnexion", {
+      method: "POST",
+    });
   },
 };

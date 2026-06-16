@@ -1,98 +1,22 @@
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { listeService } from "../services/listeService";
-import type { DetailListeDto, CadeauDto } from "../types/liste";
+import { useListeDetail } from "../hooks/useListeDetail";
 
 export default function ListeDetail() {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const [liste, setListe] = useState<DetailListeDto | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [erreur, setErreur] = useState("");
-
-  // État pour le formulaire d'ajout/modification
-  const [editingObjet, setEditingObjet] = useState<CadeauDto | null>(null);
-  const [showModal, setShowModal] = useState(false);
-  const [formData, setFormData] = useState<CadeauDto>({
-    titre: "",
-    description: "",
-    url: "",
-    priorite: "❤️",
-    estPrit: false
-  });
-
-  const fetchListe = async () => {
-    if (!id) return;
-    try {
-      setLoading(true);
-      const data = await listeService.getUneListe(parseInt(id));
-      setListe(data);
-    } catch (err) {
-      setErreur(err instanceof Error ? err.message : "Erreur de chargement");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchListe();
-  }, [id]);
-
-  const handleToggleFavoris = async () => {
-    if (!liste) return;
-    try {
-      await listeService.toggleFavoris(liste.idListe);
-      fetchListe();
-    } catch (err) {
-      alert("Erreur favoris");
-    }
-  };
-
-  const handleToggleOffrir = async (idObjet: number) => {
-    try {
-      await listeService.toggleOffrirCadeau(idObjet);
-      fetchListe();
-    } catch (err) {
-      alert("Erreur action offrir");
-    }
-  };
-
-  const handleDeleteObjet = async (idObjet: number) => {
-    if (!window.confirm("Supprimer cet objet ?")) return;
-    try {
-      await listeService.supprimerCadeau(idObjet);
-      fetchListe();
-    } catch (err) {
-      alert("Erreur suppression");
-    }
-  };
-
-  const openModal = (objet?: CadeauDto) => {
-    if (objet) {
-      setEditingObjet(objet);
-      setFormData({ ...objet });
-    } else {
-      setEditingObjet(null);
-      setFormData({ titre: "", description: "", url: "", priorite: "❤️", estPrit: false });
-    }
-    setShowModal(true);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!id) return;
-    try {
-      if (editingObjet) {
-        await listeService.modifierCadeau(formData);
-      } else {
-        await listeService.ajouterCadeau(parseInt(id), formData);
-      }
-      setShowModal(false);
-      fetchListe();
-    } catch (err) {
-      alert("Erreur enregistrement");
-    }
-  };
+  const {
+    liste,
+    loading,
+    erreur,
+    showModal,
+    editingObjet,
+    formData,
+    navigate,
+    handleToggleFavoris,
+    handleToggleOffrir,
+    handleDeleteObjet,
+    openModal,
+    closeModal,
+    handleSubmit,
+    handleInputChange
+  } = useListeDetail();
 
   if (loading) return <div className="container py-5 text-center">Chargement...</div>;
   if (erreur) return <div className="container py-5 alert alert-danger">{erreur}</div>;
@@ -106,7 +30,7 @@ export default function ListeDetail() {
             &larr; Retour à mes listes
           </button>
           <h1>{liste.nomListe}</h1>
-          <p className="text-muted">Propriétaire : {liste?.listeCadeaux?.pseudoProprietaire}</p>
+          <p className="text-muted">Propriétaire : {liste?.listeCadeaux?.proprietaire}</p>
         </div>
         {!liste.estProprietaire && (
           <button 
@@ -143,11 +67,11 @@ export default function ListeDetail() {
                   </a>
                 )}
                 <div className="mt-3">
-                  {objet.estPrit ? (
+                  {!liste.estProprietaire && (objet.estPrit  ? (
                     <span className="badge bg-success">Offert par {objet.pseudoDetenteur || objet.detenteur || "quelqu'un"}</span>
                   ) : (
                     <span className="badge bg-light text-dark">Libre</span>
-                  )}
+                  ))}
                 </div>
               </div>
               <div className="card-footer bg-transparent border-top-0">
@@ -179,7 +103,7 @@ export default function ListeDetail() {
               <form onSubmit={handleSubmit}>
                 <div className="modal-header">
                   <h5 className="modal-title">{editingObjet ? "Modifier l'objet" : "Ajouter un objet"}</h5>
-                  <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+                  <button type="button" className="btn-close" onClick={closeModal}></button>
                 </div>
                 <div className="modal-body">
                   <div className="mb-3">
@@ -189,7 +113,7 @@ export default function ListeDetail() {
                       className="form-control" 
                       required 
                       value={formData.titre}
-                      onChange={(e) => setFormData({...formData, titre: e.target.value})}
+                      onChange={(e) => handleInputChange("titre", e.target.value)}
                     />
                   </div>
                   <div className="mb-3">
@@ -198,7 +122,7 @@ export default function ListeDetail() {
                       className="form-control" 
                       rows={3}
                       value={formData.description}
-                      onChange={(e) => setFormData({...formData, description: e.target.value})}
+                      onChange={(e) => handleInputChange("description", e.target.value)}
                     ></textarea>
                   </div>
                   <div className="mb-3">
@@ -207,26 +131,26 @@ export default function ListeDetail() {
                       type="url" 
                       className="form-control" 
                       value={formData.url}
-                      onChange={(e) => setFormData({...formData, url: e.target.value})}
+                      onChange={(e) => handleInputChange("url", e.target.value)}
                     />
                   </div>
                   <div className="mb-3">
                     <label className="form-label">Priorité</label>
                     <select 
                       className="form-select"
-                      value={formData.priorite}
-                      onChange={(e) => setFormData({...formData, priorite: e.target.value})}
+                      value={formData.valuePriorite}
+                      onChange={(e) => handleInputChange("valuePriorite", e.target.value)}
                     >
-                      <option value="❤️">❤️</option>
-                      <option value="❤️❤️">❤️❤️</option>
-                      <option value="❤️❤️❤️">❤️❤️❤️</option>
-                      <option value="❤️❤️❤️❤️">❤️❤️❤️❤️</option>
-                      <option value="❤️❤️❤️❤️❤️">❤️❤️❤️❤️❤️</option>
+                      <option value="5">❤️</option>
+                      <option value="4">❤️❤️</option>
+                      <option value="3">❤️❤️❤️</option>
+                      <option value="2">❤️❤️❤️❤️</option>
+                      <option value="1">❤️❤️❤️❤️❤️</option>
                     </select>
                   </div>
                 </div>
                 <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Annuler</button>
+                  <button type="button" className="btn btn-secondary" onClick={closeModal}>Annuler</button>
                   <button type="submit" className="btn btn-primary">Enregistrer</button>
                 </div>
               </form>
