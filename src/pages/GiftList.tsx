@@ -1,5 +1,6 @@
 // pages/GiftList.tsx
 
+import { Link } from "react-router-dom";
 import { useListes } from "../hooks/useListes";
 
 export default function GiftList() {
@@ -31,15 +32,15 @@ export default function GiftList() {
           <p className="text-muted italic">Vous n'avez pas encore de listes favorites.</p>
         ) : (
           <div className="row row-cols-1 row-cols-md-3 g-4">
-            {favoris.map((liste, index) => (
-              <div key={index} className="col">
+            {favoris.map((liste) => (
+              <div key={liste.idListe} className="col">
                 <div className="card h-100 border-primary shadow-sm">
                   <div className="card-body">
                     <h5 className="card-title">{liste.nomListe}</h5>
                     <p className="card-text text-muted small">Propriétaire : {liste.proprietaire}</p>
                   </div>
                   <div className="card-footer bg-transparent">
-                    <button className="btn btn-outline-primary btn-sm w-100">Voir la liste</button>
+                    <Link to={`/liste/${liste.idListe}`} className="btn btn-outline-primary btn-sm w-100">Voir la liste</Link>
                   </div>
                 </div>
               </div>
@@ -61,18 +62,18 @@ export default function GiftList() {
           </div>
         ) : (
           <div className="row row-cols-1 row-cols-md-3 g-4">
-            {listes.map((liste, index) => (
-              <div key={index} className="col">
+            {listes.map((liste) => (
+              <div key={liste.idListe} className="col">
                 <div className="card h-100 shadow-sm">
                   <div className="card-body">
                     <h5 className="card-title">{liste.nomListe}</h5>
-                    <span className={`badge ${liste.partagee ? 'bg-info' : 'bg-secondary'}`}>
-                      {liste.partagee ? 'Partagée' : 'Privée'}
+                    <span className={`badge ${liste.urlPartage ? 'bg-info' : 'bg-secondary'}`}>
+                      {liste.urlPartage ? 'Partagée' : 'Privée'}
                     </span>
                   </div>
                   <div className="card-footer bg-transparent">
                     <div className="btn-group w-100">
-                      <button className="btn btn-outline-secondary btn-sm">Gérer</button>
+                      <Link to={`/liste/${liste.idListe}`} className="btn btn-outline-secondary btn-sm">Gérer</Link>
                       <button className="btn btn-outline-danger btn-sm">Supprimer</button>
                     </div>
                   </div>

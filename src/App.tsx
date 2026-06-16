@@ -9,6 +9,7 @@ import PolitiqueConfidentialite from "./pages/PolitiqueConfidentialite";
 import PolitiqueSecurite from "./pages/PolitiqueSecurite";
 import Connexion from "./pages/Connexion";
 import GiftList from "./pages/GiftList";
+import ListeDetail from "./pages/ListeDetail";
 
 // App.tsx est le point d'entrée de ton app React.
 // Il remplace le rôle du dispatcher Spring MVC (les @GetMapping de tes controllers).
@@ -34,6 +35,7 @@ export default function App() {
             <Route path="/politique-securite" element={<PolitiqueSecurite />} />
             <Route path="/connexion" element={<Connexion />} />
             <Route path="/mes-listes" element={<GiftList />} />
+            <Route path="/liste/:id" element={<ListeDetail />} />
             {/* Tu ajouteras tes autres pages ici au fur et à mesure : */}
             {/* <Route path="/inscription" element={<Register />} /> */}
           </Routes>
