@@ -14,7 +14,7 @@ export default function Connexion() {
     handleConnexion,
     showModal, setShowModal,
     emailOublie, setEmailOublie,
-    messageOublie,
+    messageOublie, erreurOublie,
     handleMotDePasseOublie,
   } = useConnexion();
 
@@ -104,7 +104,8 @@ export default function Connexion() {
                         required
                       />
                     </div>
-                    {messageOublie && <p className="alert alert-info">{messageOublie}</p>}
+                    {erreurOublie && <p className="alert alert-danger">{erreurOublie}</p>}
+                    {messageOublie && <p className="alert alert-success text-center">{messageOublie}</p>}
                   </div>
                   <div className="modal-footer">
                     <button type="submit" className="btn btn-primary">Envoyer</button>

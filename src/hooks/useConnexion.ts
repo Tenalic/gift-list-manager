@@ -22,6 +22,8 @@ export function useConnexion() {
   const [showModal, setShowModal] = useState(false);
   const [emailOublie, setEmailOublie] = useState("");
   const [messageOublie, setMessageOublie] = useState("");
+  const [erreurOublie, setErreurOublie] = useState("");
+
 
   // Handler connexion : appelle le service, gère la réponse
   const handleConnexion = async (e: React.SyntheticEvent<HTMLFormElement>) => {
@@ -49,17 +51,18 @@ export function useConnexion() {
   const handleMotDePasseOublie = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setMessageOublie("");
+    setErreurOublie("");
 
     try {
       const result = await authService.motDePasseOublie({ email: emailOublie });
       if (result.erreur) {
-        setMessageOublie(result.erreur);
+        setErreurOublie(result.erreur);
       } else {
         setMessageOublie(result.message ?? "");
         setEmailOublie("");
       }
     } catch {
-      setMessageOublie("Impossible de contacter le serveur.");
+      setErreurOublie("Impossible de contacter le serveur.");
     }
   };
 
@@ -76,6 +79,7 @@ export function useConnexion() {
     showModal, setShowModal,
     emailOublie, setEmailOublie,
     messageOublie,
+    erreurOublie,
     handleMotDePasseOublie,
   };
 }

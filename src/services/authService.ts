@@ -11,10 +11,22 @@ export interface ConnexionRequest {
 export interface ConnexionResponse {
   erreur?: string;
   message?: string;
+  codeRetour?: number;
+}
+
+export interface GeneriqueResponse {
+  messageRetour: string;
+  codeRetour: number;
 }
 
 export interface MotDePasseOublieRequest {
   email: string;
+}
+
+export interface ModifierMotDePasseRequest {
+  ancienMotDePasse: string;
+  nouveauMotDePasse: string;
+  confirmationMotDePasse: string;
 }
 
 export interface InscriptionRequest {
@@ -58,19 +70,76 @@ export const authService = {
     }
   },
 
-  // POST /api/mot-de-passe-oublie
+  // POST /api/compte/mot-de-passe-oublie
   async motDePasseOublie(data: MotDePasseOublieRequest): Promise<ConnexionResponse> {
-    const response = await fetch("/api/mot-de-passe-oublie", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
+    try {
+      const response = await fetch("/api/compte/mot-de-passe-oublie", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Accept-Language": navigator.language.split("-")[0]
+        },
+        body: JSON.stringify(data),
+      });
 
-    if (!response.ok) {
-      return { erreur: "Aucun compte trouvé avec cet email." };
+      let result: GeneriqueResponse;
+      try {
+        result = await response.json();
+      } catch {
+        return { erreur: `Erreur serveur (${response.status}).` };
+      }
+
+      if (!response.ok) {
+        return { 
+          erreur: result.messageRetour || "Une erreur est survenue.",
+          codeRetour: result.codeRetour 
+        };
+      }
+
+      return { 
+        message: result.messageRetour,
+        codeRetour: result.codeRetour 
+      };
+    } catch (error) {
+      console.error("Erreur mot de passe oublié:", error);
+      return { erreur: "Impossible de contacter le serveur." };
     }
+  },
 
-    return { message: "Un email de réinitialisation a été envoyé." };
+  // POST /api/compte/update-password
+  async modifierMotDePasse(data: ModifierMotDePasseRequest): Promise<ConnexionResponse> {
+    try {
+      const response = await fetch("/api/compte/update-password", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Accept-Language": navigator.language.split("-")[0]
+        },
+        body: JSON.stringify(data),
+      });
+
+      let result: GeneriqueResponse;
+      try {
+        result = await response.json();
+      } catch {
+        return { erreur: `Erreur serveur (${response.status}).` };
+      }
+
+      if (!response.ok) {
+        return { 
+          erreur: result.messageRetour || "Une erreur est survenue lors de la modification.",
+          codeRetour: result.codeRetour 
+        };
+      }
+
+      return { 
+        message: result.messageRetour,
+        codeRetour: result.codeRetour 
+      };
+    } catch (error) {
+      console.error("Erreur modification mot de passe:", error);
+      return { erreur: "Impossible de contacter le serveur." };
+    }
   },
 
   // POST /api/compte/inscription

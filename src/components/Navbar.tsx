@@ -45,10 +45,6 @@ export default function Navbar() {
                 </li>
               </>
             )}
-
-            <li className="nav-item">
-              <Link className="nav-link" to="/" onClick={closeNavbar}>Accueil</Link>
-            </li>
             <li className="nav-item">
               <Link className="nav-link" to="/mes-listes" onClick={closeNavbar}>Mes listes</Link>
             </li>
@@ -56,7 +52,7 @@ export default function Navbar() {
             {/* th:if="${connected}" → on affiche seulement si connecté */}
             {isConnected && (
               <li className="nav-item">
-                <Link className="nav-link" to="/modifier-password" onClick={closeNavbar}>Modifier mon mot de passe</Link>
+                <Link className="nav-link" to="/modifier-mot-de-passe" onClick={closeNavbar}>Modifier mon mot de passe</Link>
               </li>
             )}
 

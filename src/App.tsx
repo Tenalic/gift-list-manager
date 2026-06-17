@@ -12,6 +12,7 @@ import Inscription from "./pages/Inscription";
 import GiftList from "./pages/GiftList";
 import ListeDetail from "./pages/ListeDetail";
 import Deconnexion from "./pages/Deconnexion";
+import ModifierMotDePasse from "./pages/ModifierMotDePasse";
 
 // App.tsx est le point d'entrée de ton app React.
 // Il remplace le rôle du dispatcher Spring MVC (les @GetMapping de tes controllers).
@@ -38,6 +39,7 @@ export default function App() {
             <Route path="/connexion" element={<Connexion />} />
             <Route path="/inscription" element={<Inscription />} />
             <Route path="/deconnexion" element={<Deconnexion />} />
+            <Route path="/modifier-mot-de-passe" element={<ModifierMotDePasse />} />
             <Route path="/mes-listes" element={<GiftList />} />
             <Route path="/liste/:id" element={<ListeDetail />} />
           </Routes>
