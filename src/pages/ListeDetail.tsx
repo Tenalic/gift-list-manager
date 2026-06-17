@@ -33,7 +33,7 @@ export default function ListeDetail() {
           <p className="text-muted">Propriétaire : {liste?.listeCadeaux?.proprietaire}</p>
         </div>
         {!liste.estProprietaire && (
-          <button 
+          <button
             className={`btn ${liste.estFavoris ? 'btn-warning' : 'btn-outline-warning'}`}
             onClick={handleToggleFavoris}
           >
@@ -58,8 +58,8 @@ export default function ListeDetail() {
               <div className="card-body">
                 <div className="d-flex justify-content-between align-items-start">
                   <h5 className="card-title">{objet.titre}</h5>
-                  <span className="fs-4">{objet.priorite}</span>
                 </div>
+                <span className="fs-4">{objet.priorite}</span>
                 <p className="card-text">{objet.description}</p>
                 {objet.url && (
                   <a href={objet.url} target="_blank" rel="noopener noreferrer" className="btn btn-link btn-sm p-0">
@@ -67,7 +67,7 @@ export default function ListeDetail() {
                   </a>
                 )}
                 <div className="mt-3">
-                  {!liste.estProprietaire && (objet.estPrit  ? (
+                  {!liste.estProprietaire && (objet.estPrit ? (
                     <span className="badge bg-success">Offert par {objet.pseudoDetenteur || objet.detenteur || "quelqu'un"}</span>
                   ) : (
                     <span className="badge bg-light text-dark">Libre</span>
@@ -81,7 +81,7 @@ export default function ListeDetail() {
                     <button className="btn btn-outline-danger btn-sm" onClick={() => objet.idObjet && handleDeleteObjet(objet.idObjet)}>Supprimer</button>
                   </div>
                 ) : (
-                  <button 
+                  <button
                     className={`btn btn-sm w-100 ${objet.estPrit ? (objet.pseudoDetenteur === "Moi" || objet.detenteur === "Moi" ? 'btn-danger' : 'btn-secondary disabled') : 'btn-success'}`}
                     onClick={() => objet.idObjet && handleToggleOffrir(objet.idObjet)}
                     disabled={objet.estPrit && (objet.pseudoDetenteur !== "Moi" && objet.detenteur !== "Moi")}
@@ -108,18 +108,18 @@ export default function ListeDetail() {
                 <div className="modal-body">
                   <div className="mb-3">
                     <label className="form-label">Titre</label>
-                    <input 
-                      type="text" 
-                      className="form-control" 
-                      required 
+                    <input
+                      type="text"
+                      className="form-control"
+                      required
                       value={formData.titre}
                       onChange={(e) => handleInputChange("titre", e.target.value)}
                     />
                   </div>
                   <div className="mb-3">
                     <label className="form-label">Description</label>
-                    <textarea 
-                      className="form-control" 
+                    <textarea
+                      className="form-control"
                       rows={3}
                       value={formData.description}
                       onChange={(e) => handleInputChange("description", e.target.value)}
@@ -127,16 +127,16 @@ export default function ListeDetail() {
                   </div>
                   <div className="mb-3">
                     <label className="form-label">URL</label>
-                    <input 
-                      type="url" 
-                      className="form-control" 
+                    <input
+                      type="url"
+                      className="form-control"
                       value={formData.url}
                       onChange={(e) => handleInputChange("url", e.target.value)}
                     />
                   </div>
                   <div className="mb-3">
                     <label className="form-label">Priorité</label>
-                    <select 
+                    <select
                       className="form-select"
                       value={formData.valuePriorite}
                       onChange={(e) => handleInputChange("valuePriorite", e.target.value)}

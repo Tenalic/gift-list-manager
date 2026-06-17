@@ -18,6 +18,7 @@ export const useListeDetail = () => {
     description: "",
     url: "",
     priorite: "❤️",
+    valuePriorite: 5,
     estPrit: false
   });
 
@@ -73,7 +74,7 @@ export const useListeDetail = () => {
       setFormData({ ...objet });
     } else {
       setEditingObjet(null);
-      setFormData({ titre: "", description: "", url: "", priorite: "❤️", estPrit: false });
+      setFormData({ titre: "", description: "", url: "", priorite: "❤️", valuePriorite: 5, estPrit: false });
     }
     setShowModal(true);
   };
