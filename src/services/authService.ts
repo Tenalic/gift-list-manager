@@ -51,6 +51,7 @@ export const authService = {
           "Content-Type": "application/json",
           "Accept-Language": navigator.language.split("-")[0]
         },
+        credentials: "include",
         body: JSON.stringify(data),
       });
 
@@ -118,6 +119,7 @@ export const authService = {
           "Content-Type": "application/json",
           "Accept-Language": navigator.language.split("-")[0]
         },
+        credentials: "include",
         body: JSON.stringify(data),
       });
 
@@ -154,6 +156,7 @@ export const authService = {
           "Content-Type": "application/json",
           "Accept-Language": navigator.language.split("-")[0]
         },
+        credentials: "include",
         body: JSON.stringify(data),
       });
 
@@ -177,6 +180,7 @@ export const authService = {
   async deconnexion(): Promise<void> {
     await fetch(`${API_BASE_URL}/api/compte/deconnexion`, {
       method: "POST",
+      credentials: "include",
     });
   },
 };
