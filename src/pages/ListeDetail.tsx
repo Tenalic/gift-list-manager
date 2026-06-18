@@ -35,7 +35,7 @@ export default function ListeDetail() {
           <h4 className="alert-heading">Mode Invité</h4>
           <p className="mb-0">
             Vous consultez cette liste en tant qu'invité. 
-            <Link to="/connexion" className="alert-link mx-1">Connectez-vous</Link> 
+            <Link to={`/connexion?redirect=/liste/${liste?.listeCadeaux?.idListe}`} className="alert-link mx-1">Connectez-vous</Link> 
             pour pouvoir offrir des cadeaux et participer à la liste !
           </p>
         </div>
@@ -118,7 +118,7 @@ export default function ListeDetail() {
                     className={`btn btn-sm w-100 ${!isConnected ? 'btn-outline-secondary' : (objet.estPrit ? (objet.pseudoDetenteur === "Moi" || objet.detenteur === "Moi" ? 'btn-danger' : 'btn-secondary disabled') : 'btn-success')}`}
                     onClick={() => {
                       if (!isConnected) {
-                        navigate("/connexion");
+                        navigate(`/connexion?redirect=/liste/${liste.idListe}`);
                       } else if (objet.idObjet) {
                         handleToggleOffrir(objet.idObjet);
                       }

@@ -3,13 +3,18 @@
 // Analogie Java : c'est ton @Service
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { authService } from "../services/authService.ts";
 
 export function useConnexion() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
+
+  // Récupérer le paramètre de redirection
+  const queryParams = new URLSearchParams(location.search);
+  const redirectPath = queryParams.get("redirect") || "/mes-listes";
 
   // États du formulaire de connexion
   const [email, setEmail] = useState("");
@@ -38,7 +43,7 @@ export function useConnexion() {
         setErreur(result.erreur);
       } else {
         login();
-        navigate("/mes-listes");
+        navigate(redirectPath);
       }
     } catch {
       setErreur("Impossible de contacter le serveur. Veuillez réessayer.");
