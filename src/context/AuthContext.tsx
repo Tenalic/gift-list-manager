@@ -5,7 +5,8 @@ import { authService } from "../services/authService";
 // --- Types TypeScript ---
 interface AuthContextType {
   isConnected: boolean;
-  login: () => void;
+  pseudo: string;
+  login: (pseudo: string) => void;
   logout: () => void;
   loading: boolean;
 }
@@ -17,6 +18,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const [pseudo, setPseudo] = useState<string>("");
 
   // Vérifier la session au chargement (refresh)
   useEffect(() => {
@@ -35,11 +37,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     checkSession();
   }, []);
 
-  const login = () => setIsConnected(true);
-  const logout = () => setIsConnected(false);
+  const login = (pseudo: string) => { setIsConnected(true); setPseudo(pseudo); };
+  const logout = () => { setIsConnected(false); setPseudo(""); };
 
   return (
-    <AuthContext.Provider value={{ isConnected, login, logout, loading }}>
+    <AuthContext.Provider value={{ isConnected, pseudo, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

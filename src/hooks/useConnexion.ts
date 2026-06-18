@@ -42,7 +42,7 @@ export function useConnexion() {
       if (result.erreur) {
         setErreur(result.erreur);
       } else {
-        login();
+        login(result?.pseudo ?? ""); // Mettre à jour le contexte avec le pseudo
         navigate(redirectPath);
       }
     } catch {

@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 
 export default function ListeDetail() {
-  const { isConnected } = useAuth();
+  const { isConnected, pseudo } = useAuth();
   const {
     liste,
     loading,
@@ -21,7 +21,7 @@ export default function ListeDetail() {
     closeModal,
     handleSubmit,
     handleInputChange,
-    copyLinkToClipboard
+    copyLinkToClipboard,
   } = useListeDetail();
 
   if (loading) return <div className="container py-5 text-center">Chargement...</div>;
@@ -115,7 +115,7 @@ export default function ListeDetail() {
                   </div>
                 ) : (
                   <button
-                    className={`btn btn-sm w-100 ${!isConnected ? 'btn-outline-secondary' : (objet.estPrit ? (objet.pseudoDetenteur === "Moi" || objet.detenteur === "Moi" ? 'btn-danger' : 'btn-secondary disabled') : 'btn-success')}`}
+                    className={`btn btn-sm w-100 ${!isConnected ? 'btn-outline-secondary' : (objet.estPrit ? (objet.pseudoDetenteur === pseudo || objet.detenteur === pseudo ? 'btn-danger' : 'btn-secondary disabled') : 'btn-success')}`}
                     onClick={() => {
                       if (!isConnected) {
                         navigate(`/connexion?redirect=/liste/${liste.idListe}`);
@@ -123,11 +123,11 @@ export default function ListeDetail() {
                         handleToggleOffrir(objet.idObjet);
                       }
                     }}
-                    disabled={isConnected && objet.estPrit && (objet.pseudoDetenteur !== "Moi" && objet.detenteur !== "Moi")}
+                    disabled={isConnected && objet.estPrit && (objet.pseudoDetenteur !== pseudo && objet.detenteur !== pseudo)}
                   >
                     {!isConnected 
                       ? "Connectez-vous pour offrir" 
-                      : (objet.pseudoDetenteur === "Moi" || objet.detenteur === "Moi") 
+                      : (objet.pseudoDetenteur === pseudo || objet.detenteur === pseudo) 
                         ? "Ne plus offrir" 
                         : (objet.estPrit ? "Déjà offert" : "Offrir")}
                   </button>

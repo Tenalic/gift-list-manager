@@ -8,6 +8,7 @@ export interface ConnexionResponse {
   erreur?: string;
   message?: string;
   codeRetour?: number;
+  pseudo?: string;
 }
 
 export interface GeneriqueResponse {
@@ -56,7 +57,7 @@ export const authService = {
           return { erreur: `Le serveur a répondu avec une erreur (${response.status}).` };
         }
       }
-      return {};
+      return response.json();
     } catch (error) {
       console.error("Erreur de connexion:", error);
       throw error;
@@ -90,7 +91,7 @@ export const authService = {
       }
       return { 
         message: result.messageRetour,
-        codeRetour: result.codeRetour 
+        codeRetour: result.codeRetour,
       };
     } catch (error) {
       console.error("Erreur mot de passe oublié:", error);
