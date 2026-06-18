@@ -13,9 +13,11 @@ const getHeaders = () => ({
   "Accept-Language": navigator.language.split("-")[0]
 });
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+
 export const listeService = {
   async getMesListes(): Promise<MesListesResponse> {
-    const response = await fetch("/api/liste/mes-listes", {
+    const response = await fetch(`${API_BASE_URL}/api/liste/mes-listes`, {
       method: "GET",
       headers: getHeaders(),
     });
@@ -24,7 +26,7 @@ export const listeService = {
   },
 
   async creerListe(nomListe: string): Promise<void> {
-    const response = await fetch("/api/liste/creer", {
+    const response = await fetch(`${API_BASE_URL}/api/liste/creer`, {
       method: "POST",
       headers: getHeaders(),
       body: JSON.stringify({ nomListe }),
@@ -33,7 +35,7 @@ export const listeService = {
   },
 
   async supprimerListe(idListe: number): Promise<void> {
-    const response = await fetch(`/api/liste/${idListe}`, {
+    const response = await fetch(`${API_BASE_URL}/api/liste/${idListe}`, {
       method: "DELETE",
       headers: { "Accept-Language": navigator.language.split("-")[0] }
     });
@@ -41,7 +43,7 @@ export const listeService = {
   },
 
   async getUneListe(idListe: number): Promise<DetailListeDto> {
-    const response = await fetch(`/api/liste/${idListe}`, {
+    const response = await fetch(`${API_BASE_URL}/api/liste/${idListe}`, {
       method: "GET",
       headers: getHeaders(),
     });
@@ -50,7 +52,7 @@ export const listeService = {
   },
 
   async ajouterCadeau(idListe: number, objet: CadeauDto): Promise<void> {
-    const response = await fetch(`/api/liste/${idListe}/cadeau`, {
+    const response = await fetch(`${API_BASE_URL}/api/liste/${idListe}/cadeau`, {
       method: "POST",
       headers: getHeaders(),
       body: JSON.stringify(objet),
@@ -59,7 +61,7 @@ export const listeService = {
   },
 
   async modifierCadeau(objet: CadeauDto): Promise<void> {
-    const response = await fetch(`/api/cadeau/${objet.idObjet}`, {
+    const response = await fetch(`${API_BASE_URL}/api/cadeau/${objet.idObjet}`, {
       method: "PUT",
       headers: getHeaders(),
       body: JSON.stringify(objet),
@@ -68,7 +70,7 @@ export const listeService = {
   },
 
   async supprimerCadeau(idObjet: number): Promise<void> {
-    const response = await fetch(`/api/cadeau/${idObjet}`, {
+    const response = await fetch(`${API_BASE_URL}/api/cadeau/${idObjet}`, {
       method: "DELETE",
       headers: { "Accept-Language": navigator.language.split("-")[0] }
     });
@@ -76,7 +78,7 @@ export const listeService = {
   },
 
   async toggleFavoris(idListe: number): Promise<void> {
-    const response = await fetch(`/api/liste/${idListe}/favoris`, {
+    const response = await fetch(`${API_BASE_URL}/api/liste/${idListe}/favoris`, {
       method: "POST",
       headers: { "Accept-Language": navigator.language.split("-")[0] }
     });
@@ -84,7 +86,7 @@ export const listeService = {
   },
 
   async toggleOffrirCadeau(idObjet: number): Promise<void> {
-    const response = await fetch(`/api/cadeau/${idObjet}/offrir`, {
+    const response = await fetch(`${API_BASE_URL}/api/cadeau/${idObjet}/offrir`, {
       method: "POST",
       headers: { "Accept-Language": navigator.language.split("-")[0] }
     });

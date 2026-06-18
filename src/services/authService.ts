@@ -38,12 +38,14 @@ export interface InscriptionRequest {
 }
 
 // --- Appels API ---
+const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+
 export const authService = {
 
   // POST /api/connexion
   async connexion(data: ConnexionRequest): Promise<ConnexionResponse> {
     try {
-      const response = await fetch("/api/compte/connexion", {
+      const response = await fetch(`${API_BASE_URL}/api/compte/connexion`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -73,7 +75,7 @@ export const authService = {
   // POST /api/compte/mot-de-passe-oublie
   async motDePasseOublie(data: MotDePasseOublieRequest): Promise<ConnexionResponse> {
     try {
-      const response = await fetch("/api/compte/mot-de-passe-oublie", {
+      const response = await fetch(`${API_BASE_URL}/api/compte/mot-de-passe-oublie`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -109,7 +111,7 @@ export const authService = {
   // POST /api/compte/update-password
   async modifierMotDePasse(data: ModifierMotDePasseRequest): Promise<ConnexionResponse> {
     try {
-      const response = await fetch("/api/compte/update-password", {
+      const response = await fetch(`${API_BASE_URL}/api/compte/update-password`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -145,7 +147,7 @@ export const authService = {
   // POST /api/compte/inscription
   async inscription(data: InscriptionRequest): Promise<ConnexionResponse> {
     try {
-      const response = await fetch("/api/compte/inscription", {
+      const response = await fetch(`${API_BASE_URL}/api/compte/inscription`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -172,7 +174,7 @@ export const authService = {
 
   // POST /api/compte/deconnexion
   async deconnexion(): Promise<void> {
-    await fetch("/api/compte/deconnexion", {
+    await fetch(`${API_BASE_URL}/api/compte/deconnexion`, {
       method: "POST",
     });
   },
