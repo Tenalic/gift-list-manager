@@ -1,10 +1,14 @@
 import { useListeDetail } from "../hooks/useListeDetail";
+import { useAuth } from "../context/AuthContext";
+import { Link } from "react-router-dom";
 
 export default function ListeDetail() {
+  const { isConnected } = useAuth();
   const {
     liste,
     loading,
     erreur,
+    ordreTri,
     showModal,
     editingObjet,
     formData,
@@ -12,10 +16,12 @@ export default function ListeDetail() {
     handleToggleFavoris,
     handleToggleOffrir,
     handleDeleteObjet,
+    toggleTri,
     openModal,
     closeModal,
     handleSubmit,
-    handleInputChange
+    handleInputChange,
+    copyLinkToClipboard
   } = useListeDetail();
 
   if (loading) return <div className="container py-5 text-center">Chargement...</div>;
@@ -24,6 +30,16 @@ export default function ListeDetail() {
 
   return (
     <main className="container py-5">
+      {!isConnected && (
+        <div className="alert alert-info shadow-sm mb-4" role="alert">
+          <h4 className="alert-heading">Mode Invité</h4>
+          <p className="mb-0">
+            Vous consultez cette liste en tant qu'invité. 
+            <Link to="/connexion" className="alert-link mx-1">Connectez-vous</Link> 
+            pour pouvoir offrir des cadeaux et participer à la liste !
+          </p>
+        </div>
+      )}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <div>
           <button className="btn btn-link p-0 mb-2" onClick={() => navigate("/mes-listes")}>
@@ -32,23 +48,35 @@ export default function ListeDetail() {
           <h1>{liste.nomListe}</h1>
           <p className="text-muted">Propriétaire : {liste?.listeCadeaux?.proprietaire}</p>
         </div>
-        {!liste.estProprietaire && (
-          <button
-            className={`btn ${liste.estFavoris ? 'btn-warning' : 'btn-outline-warning'}`}
-            onClick={handleToggleFavoris}
-          >
-            {liste.estFavoris ? "⭐ En favoris" : "☆ Ajouter aux favoris"}
-          </button>
-        )}
+        <div className="d-flex gap-2">
+          {liste.estProprietaire && (
+            <button className="btn btn-outline-primary" onClick={copyLinkToClipboard}>
+              🔗 Partager la liste
+            </button>
+          )}
+          {!liste.estProprietaire && isConnected && (
+            <button
+              className={`btn ${liste.estEnFavoris ? 'btn-warning' : 'btn-outline-warning'}`}
+              onClick={handleToggleFavoris}
+            >
+              {liste.estEnFavoris ? "⭐ En favoris" : "☆ Ajouter aux favoris"}
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2>Cadeaux</h2>
-        {liste.estProprietaire && (
-          <button className="btn btn-primary" onClick={() => openModal()}>
-            + Ajouter un objet
+        <div className="d-flex gap-2">
+          <button className="btn btn-outline-secondary" onClick={toggleTri}>
+            Trier par priorité {ordreTri === "asc" ? "▲" : "▼"}
           </button>
-        )}
+          {liste.estProprietaire && (
+            <button className="btn btn-primary" onClick={() => openModal()}>
+              + Ajouter un objet
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
@@ -67,11 +95,16 @@ export default function ListeDetail() {
                   </a>
                 )}
                 <div className="mt-3">
-                  {!liste.estProprietaire && (objet.estPrit ? (
-                    <span className="badge bg-success">Offert par {objet.pseudoDetenteur || objet.detenteur || "quelqu'un"}</span>
-                  ) : (
-                    <span className="badge bg-light text-dark">Libre</span>
-                  ))}
+                  {!liste.estProprietaire && isConnected && (
+                    objet.estPrit ? (
+                      <span className="badge bg-success">Offert par {objet.pseudoDetenteur || objet.detenteur || "quelqu'un"}</span>
+                    ) : (
+                      <span className="badge bg-light text-dark">Libre</span>
+                    )
+                  )}
+                  {!isConnected && (
+                    <span className="badge bg-light text-muted">Statut invisible (invité)</span>
+                  )}
                 </div>
               </div>
               <div className="card-footer bg-transparent border-top-0">
@@ -82,11 +115,21 @@ export default function ListeDetail() {
                   </div>
                 ) : (
                   <button
-                    className={`btn btn-sm w-100 ${objet.estPrit ? (objet.pseudoDetenteur === "Moi" || objet.detenteur === "Moi" ? 'btn-danger' : 'btn-secondary disabled') : 'btn-success'}`}
-                    onClick={() => objet.idObjet && handleToggleOffrir(objet.idObjet)}
-                    disabled={objet.estPrit && (objet.pseudoDetenteur !== "Moi" && objet.detenteur !== "Moi")}
+                    className={`btn btn-sm w-100 ${!isConnected ? 'btn-outline-secondary' : (objet.estPrit ? (objet.pseudoDetenteur === "Moi" || objet.detenteur === "Moi" ? 'btn-danger' : 'btn-secondary disabled') : 'btn-success')}`}
+                    onClick={() => {
+                      if (!isConnected) {
+                        navigate("/connexion");
+                      } else if (objet.idObjet) {
+                        handleToggleOffrir(objet.idObjet);
+                      }
+                    }}
+                    disabled={isConnected && objet.estPrit && (objet.pseudoDetenteur !== "Moi" && objet.detenteur !== "Moi")}
                   >
-                    {(objet.pseudoDetenteur === "Moi" || objet.detenteur === "Moi") ? "Ne plus offrir" : (objet.estPrit ? "Déjà offert" : "Offrir")}
+                    {!isConnected 
+                      ? "Connectez-vous pour offrir" 
+                      : (objet.pseudoDetenteur === "Moi" || objet.detenteur === "Moi") 
+                        ? "Ne plus offrir" 
+                        : (objet.estPrit ? "Déjà offert" : "Offrir")}
                   </button>
                 )}
               </div>

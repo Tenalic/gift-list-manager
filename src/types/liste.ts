@@ -26,5 +26,5 @@ export interface ListeDto {
 export interface DetailListeDto extends ListeDto {
   listeCadeaux: ListeDto;
   estProprietaire: boolean;
-  estFavoris: boolean;
+  estEnFavoris: boolean;
 }

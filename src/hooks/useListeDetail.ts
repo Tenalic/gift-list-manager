@@ -9,6 +9,7 @@ export const useListeDetail = () => {
   const [liste, setListe] = useState<DetailListeDto | null>(null);
   const [loading, setLoading] = useState(true);
   const [erreur, setErreur] = useState("");
+  const [ordreTri, setOrdreTri] = useState<"asc" | "desc">("asc");
 
   // État pour le formulaire d'ajout/modification
   const [editingObjet, setEditingObjet] = useState<CadeauDto | null>(null);
@@ -21,6 +22,22 @@ export const useListeDetail = () => {
     valuePriorite: 5,
     estPrit: false
   });
+
+  const sortedListe = liste ? {
+    ...liste,
+    listeCadeaux: {
+      ...liste.listeCadeaux,
+      listeObjet: [...(liste.listeCadeaux?.listeObjet || [])].sort((a, b) => {
+        const valA = a.valuePriorite ?? 0;
+        const valB = b.valuePriorite ?? 0;
+        return ordreTri === "asc" ? valA - valB : valB - valA;
+      })
+    }
+  } : null;
+
+  const toggleTri = () => {
+    setOrdreTri(prev => prev === "asc" ? "desc" : "asc");
+  };
 
   const fetchListe = async () => {
     if (!id) return;
@@ -40,9 +57,9 @@ export const useListeDetail = () => {
   }, [id]);
 
   const handleToggleFavoris = async () => {
-    if (!liste) return;
+    if (!liste || !liste.listeCadeaux) return;
     try {
-      await listeService.toggleFavoris(liste.idListe);
+      await listeService.toggleFavoris(liste?.listeCadeaux?.idListe);
       fetchListe();
     } catch (err) {
       alert("Erreur favoris");
@@ -101,10 +118,18 @@ export const useListeDetail = () => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
+  const copyLinkToClipboard = () => {
+    if (!liste?.listeCadeaux?.urlPartage) return;
+    navigator.clipboard.writeText(liste?.listeCadeaux?.urlPartage)
+      .then(() => alert("Lien copié dans le presse-papier !"))
+      .catch(() => alert("Erreur lors de la copie du lien"));
+  };
+
   return {
-    liste,
+    liste: sortedListe,
     loading,
     erreur,
+    ordreTri,
     showModal,
     editingObjet,
     formData,
@@ -112,9 +137,11 @@ export const useListeDetail = () => {
     handleToggleFavoris,
     handleToggleOffrir,
     handleDeleteObjet,
+    toggleTri,
     openModal,
     closeModal,
     handleSubmit,
-    handleInputChange
+    handleInputChange,
+    copyLinkToClipboard
   };
 };
