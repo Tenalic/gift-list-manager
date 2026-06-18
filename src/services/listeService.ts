@@ -7,7 +7,6 @@ export interface MesListesResponse {
   favoris: ListeDto[];
 }
 
-// Helper pour les headers communs
 const getHeaders = () => ({
   "Content-Type": "application/json",
   "Accept-Language": navigator.language.split("-")[0]
