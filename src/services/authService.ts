@@ -166,4 +166,18 @@ export const authService = {
       credentials: "include",
     });
   },
+
+  // GET /api/compte/me
+  async getMe(): Promise<ConnexionResponse> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/compte/me`, {
+        method: "GET",
+        credentials: "include",
+      });
+      if (response.ok) return {};
+      return { erreur: "Non connecté" };
+    } catch {
+      return { erreur: "Erreur de vérification session" };
+    }
+  },
 };

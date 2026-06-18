@@ -1,36 +1,51 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
+import { authService } from "../services/authService";
 
 // --- Types TypeScript ---
-// On décrit la "forme" de ce que le contexte va fournir
 interface AuthContextType {
   isConnected: boolean;
   login: () => void;
   logout: () => void;
+  loading: boolean;
 }
 
 // --- Création du contexte ---
-// On passe le type à createContext pour que TypeScript sache ce qu'il contient
-// "undefined" par défaut : sera remplacé dès que AuthProvider est monté
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // --- Provider ---
-// "children: ReactNode" = n'importe quel contenu React (JSX, texte, composants...)
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isConnected, setIsConnected] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  // Vérifier la session au chargement (refresh)
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const result = await authService.getMe();
+        if (!result.erreur) {
+          setIsConnected(true);
+        }
+      } catch (err) {
+        console.error("Session check failed", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    checkSession();
+  }, []);
 
   const login = () => setIsConnected(true);
   const logout = () => setIsConnected(false);
 
   return (
-    <AuthContext.Provider value={{ isConnected, login, logout }}>
+    <AuthContext.Provider value={{ isConnected, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
 }
 
 // --- Hook personnalisé ---
-// Le "if (!context)" protège contre un useAuth() utilisé hors du Provider
 export function useAuth(): AuthContextType {
   const context = useContext(AuthContext);
   if (!context) {
