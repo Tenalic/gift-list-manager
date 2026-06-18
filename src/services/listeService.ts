@@ -20,6 +20,7 @@ export const listeService = {
     const response = await fetch(`${API_BASE_URL}/api/liste/mes-listes`, {
       method: "GET",
       headers: getHeaders(),
+      credentials: "include",
     });
     if (!response.ok) throw new Error(`Erreur (${response.status})`);
     return response.json();
@@ -29,6 +30,7 @@ export const listeService = {
     const response = await fetch(`${API_BASE_URL}/api/liste/creer`, {
       method: "POST",
       headers: getHeaders(),
+      credentials: "include",
       body: JSON.stringify({ nomListe }),
     });
     if (!response.ok) throw new Error("Erreur lors de la création");
@@ -37,7 +39,8 @@ export const listeService = {
   async supprimerListe(idListe: number): Promise<void> {
     const response = await fetch(`${API_BASE_URL}/api/liste/${idListe}`, {
       method: "DELETE",
-      headers: { "Accept-Language": navigator.language.split("-")[0] }
+      headers: { "Accept-Language": navigator.language.split("-")[0] },
+      credentials: "include",
     });
     if (!response.ok) throw new Error("Erreur lors de la suppression");
   },
@@ -46,6 +49,7 @@ export const listeService = {
     const response = await fetch(`${API_BASE_URL}/api/liste/${idListe}`, {
       method: "GET",
       headers: getHeaders(),
+      credentials: "include",
     });
     if (!response.ok) throw new Error("Erreur de récupération");
     return response.json();
@@ -55,6 +59,7 @@ export const listeService = {
     const response = await fetch(`${API_BASE_URL}/api/liste/${idListe}/cadeau`, {
       method: "POST",
       headers: getHeaders(),
+      credentials: "include",
       body: JSON.stringify(objet),
     });
     if (!response.ok) throw new Error("Erreur lors de l'ajout");
@@ -64,6 +69,7 @@ export const listeService = {
     const response = await fetch(`${API_BASE_URL}/api/cadeau/${objet.idObjet}`, {
       method: "PUT",
       headers: getHeaders(),
+      credentials: "include",
       body: JSON.stringify(objet),
     });
     if (!response.ok) throw new Error("Erreur de modification");
@@ -72,7 +78,8 @@ export const listeService = {
   async supprimerCadeau(idObjet: number): Promise<void> {
     const response = await fetch(`${API_BASE_URL}/api/cadeau/${idObjet}`, {
       method: "DELETE",
-      headers: { "Accept-Language": navigator.language.split("-")[0] }
+      headers: { "Accept-Language": navigator.language.split("-")[0] },
+      credentials: "include",
     });
     if (!response.ok) throw new Error("Erreur de suppression");
   },
@@ -80,7 +87,8 @@ export const listeService = {
   async toggleFavoris(idListe: number): Promise<void> {
     const response = await fetch(`${API_BASE_URL}/api/liste/${idListe}/favoris`, {
       method: "POST",
-      headers: { "Accept-Language": navigator.language.split("-")[0] }
+      headers: { "Accept-Language": navigator.language.split("-")[0] },
+      credentials: "include",
     });
     if (!response.ok) throw new Error("Erreur favoris");
   },
@@ -88,7 +96,8 @@ export const listeService = {
   async toggleOffrirCadeau(idObjet: number): Promise<void> {
     const response = await fetch(`${API_BASE_URL}/api/cadeau/${idObjet}/offrir`, {
       method: "POST",
-      headers: { "Accept-Language": navigator.language.split("-")[0] }
+      headers: { "Accept-Language": navigator.language.split("-")[0] },
+      credentials: "include",
     });
     if (!response.ok) throw new Error("Erreur action offrir");
   },

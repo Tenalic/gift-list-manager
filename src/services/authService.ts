@@ -81,6 +81,7 @@ export const authService = {
           "Content-Type": "application/json",
           "Accept-Language": navigator.language.split("-")[0]
         },
+        credentials: "include",
         body: JSON.stringify(data),
       });
 
