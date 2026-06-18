@@ -154,7 +154,7 @@ export const authService = {
           return { erreur: "Erreur serveur lors de l'inscription." };
         }
       }
-      return {};
+      return response.json();
     } catch (error) {
       console.error("Erreur d'inscription:", error);
       throw error;

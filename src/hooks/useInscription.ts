@@ -38,7 +38,7 @@ export function useInscription() {
       if (result.erreur) {
         setErreur(result.erreur);
       } else {
-        login();
+        login(result?.pseudo || '');
         navigate("/");
       }
     } catch (err) {
