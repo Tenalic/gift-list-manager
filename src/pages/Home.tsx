@@ -60,7 +60,7 @@ export default function Home() {
             </p>
             <p className="mt-4">
               Découvrez nos fonctionnalités pour{" "}
-              <Link to="/liste">gérer vos listes de cadeaux</Link>, ou consultez{" "}
+              <Link to="/mes-listes">gérer vos listes de cadeaux</Link>, ou consultez{" "}
               <Link to="/politique-confidentialite">
                 notre politique de confidentialité
               </Link>
@@ -81,7 +81,7 @@ export default function Home() {
       {!isConnected && (
         <p className="mt-4">
           Découvrez nos fonctionnalités pour{" "}
-          <Link to="/liste">gérer vos listes de cadeaux</Link>, ou consultez{" "}
+          <Link to="/mes-listes">gérer vos listes de cadeaux</Link>, ou consultez{" "}
           <Link to="/politique-confidentialite">
             notre politique de confidentialité
           </Link>
