@@ -18,9 +18,15 @@ export interface ListeDto {
   nomListe: string;
   proprietaire: string;
   partagee: boolean;
+  publique: boolean;
   urlPartage: string;
   listeObjet: CadeauDto[];
+  nombreObjet: number;
   pseudoProprietaire: string;
+}
+
+export interface ListesDto {
+  lisOfListesCadeaux: ListeDto[];
 }
 
 export interface DetailListeDto extends ListeDto {

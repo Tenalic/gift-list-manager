@@ -68,6 +68,16 @@ export const useListeDetail = () => {
     }
   };
 
+  const handleTogglePublique = async () => {
+    if (!liste || !liste.listeCadeaux) return;
+    try {
+      await listeService.updatePublique(liste.listeCadeaux.idListe, !liste.listeCadeaux.publique);
+      fetchListe();
+    } catch {
+      alert("Erreur de modification de la visibilité");
+    }
+  };
+
   const handleToggleOffrir = async (idObjet: number) => {
     try {
       await listeService.toggleOffrirCadeau(idObjet);
@@ -137,6 +147,7 @@ export const useListeDetail = () => {
     formData,
     navigate,
     handleToggleFavoris,
+    handleTogglePublique,
     handleToggleOffrir,
     handleDeleteObjet,
     toggleTri,

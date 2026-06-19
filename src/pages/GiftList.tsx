@@ -9,10 +9,11 @@ import { listeService } from "../services/listeService";
 export default function GiftList() {
   const { isConnected } = useAuth();
   const { listes, favoris, loading, erreur, refresh } = useListes();
-  
+
   // État pour la modale de création
   const [showModal, setShowModal] = useState(false);
   const [nouveauNom, setNouveauNom] = useState("");
+  const [nouveauPublique, setNouveauPublique] = useState(false);
   const [creationLoading, setCreationLoading] = useState(false);
 
   const handleCreerListe = async (e: React.FormEvent) => {
@@ -21,8 +22,9 @@ export default function GiftList() {
 
     setCreationLoading(true);
     try {
-      await listeService.creerListe(nouveauNom);
+      await listeService.creerListe(nouveauNom, nouveauPublique);
       setNouveauNom("");
+      setNouveauPublique(false);
       setShowModal(false);
       refresh(); // On rafraîchit la vue pour voir la nouvelle liste
     } catch {
@@ -90,7 +92,7 @@ export default function GiftList() {
             + Créer une liste
           </button>
         </div>
-        
+
         {listes.length === 0 ? (
           <div className="card p-4 text-center">
             <p className="mb-0 opacity-75">Vous n'avez pas encore créé de liste.</p>
@@ -99,17 +101,22 @@ export default function GiftList() {
           <div className="row row-cols-1 row-cols-md-3 g-4">
             {listes.map((liste) => (
               <div key={liste.idListe} className="col">
-                <div className="card h-100 shadow-sm">
+                <div className="card h-100 shadow-sm position-relative">
+                  <div className="card-header bg-transparent d-flex justify-content-between align-items-center">
+                    <h5 className="card-title mb-0">{liste.nomListe}</h5>
+                    <span className={`badge ${liste.publique ? 'bg-success' : 'bg-secondary'}`}>
+                      {liste.publique ? 'Publique' : 'Privée'}
+                    </span>
+                  </div>
                   <div className="card-body">
-                    <h5 className="card-title">{liste.nomListe}</h5>
-                    <span className={`badge ${liste.urlPartage ? 'bg-info' : 'bg-secondary'}`}>
-                      {liste.urlPartage ? 'Partagée' : 'Privée'}
+                    <span className="text-muted small">
+                      🎁 {liste.nombreObjet || 0} cadeau(x)
                     </span>
                   </div>
                   <div className="card-footer bg-transparent">
                     <div className="btn-group w-100">
                       <Link to={`/liste/${liste.idListe}`} className="btn btn-outline-secondary btn-sm">Gérer</Link>
-                      <button 
+                      <button
                         className="btn btn-outline-danger btn-sm"
                         onClick={() => handleSupprimerListe(liste.idListe, liste.nomListe)}
                       >
@@ -137,6 +144,9 @@ export default function GiftList() {
                   <div className="card-body">
                     <h5 className="card-title">{liste.nomListe}</h5>
                     <p className="card-text text-muted small">Propriétaire : {liste.proprietaire}</p>
+                    <span className="text-muted small">
+                      🎁 {liste.nombreObjet || 0} cadeau(x)
+                    </span>
                   </div>
                   <div className="card-footer bg-transparent">
                     <Link to={`/liste/${liste.idListe}`} className="btn btn-outline-primary btn-sm w-100">Voir la liste</Link>
@@ -155,7 +165,7 @@ export default function GiftList() {
             <div className="modal-content shadow">
               <div className="modal-header">
                 <h5 className="modal-title">Créer une nouvelle liste</h5>
-                <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+                <button type="button" className="btn-close" onClick={() => { setShowModal(false); setNouveauPublique(false); }}></button>
               </div>
               <form onSubmit={handleCreerListe}>
                 <div className="modal-body">
@@ -172,9 +182,21 @@ export default function GiftList() {
                       autoFocus
                     />
                   </div>
+                  <div className="form-check mb-3 text-start">
+                    <input
+                      type="checkbox"
+                      id="nouveauPublique"
+                      className="form-check-input"
+                      checked={nouveauPublique}
+                      onChange={(e) => setNouveauPublique(e.target.checked)}
+                    />
+                    <label htmlFor="nouveauPublique" className="form-check-label text-start">
+                      Rendre cette liste publique (visible par tout le monde)
+                    </label>
+                  </div>
                 </div>
                 <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Annuler</button>
+                  <button type="button" className="btn btn-secondary" onClick={() => { setShowModal(false); setNouveauPublique(false); }}>Annuler</button>
                   <button type="submit" className="btn btn-success" disabled={creationLoading}>
                     {creationLoading ? (
                       <span className="spinner-border spinner-border-sm me-2" role="status"></span>

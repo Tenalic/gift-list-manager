@@ -14,6 +14,7 @@ export default function ListeDetail() {
     formData,
     navigate,
     handleToggleFavoris,
+    handleTogglePublique,
     handleToggleOffrir,
     handleDeleteObjet,
     toggleTri,
@@ -50,9 +51,18 @@ export default function ListeDetail() {
         </div>
         <div className="d-flex gap-2">
           {liste.estProprietaire && (
-            <button className="btn btn-outline-primary" onClick={copyLinkToClipboard}>
-              🔗 Partager la liste
-            </button>
+            <>
+              <button 
+                className={`btn ${liste?.listeCadeaux?.publique ? 'btn-success' : 'btn-secondary'}`} 
+                onClick={handleTogglePublique}
+                title={liste?.listeCadeaux?.publique ? "Cliquez pour rendre privée" : "Cliquez pour rendre publique"}
+              >
+                {liste?.listeCadeaux?.publique ? "🌍 Publique" : "🔒 Privée"}
+              </button>
+              <button className="btn btn-outline-primary" onClick={copyLinkToClipboard}>
+                🔗 Partager la liste
+              </button>
+            </>
           )}
           {!liste.estProprietaire && isConnected && (
             <button

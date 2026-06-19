@@ -1,4 +1,4 @@
-import type { ListeDto, DetailListeDto, CadeauDto } from "../types/liste";
+import type { ListeDto, ListesDto, DetailListeDto, CadeauDto } from "../types/liste";
 
 export interface MesListesResponse {
   messageRetour?: string;
@@ -25,14 +25,35 @@ export const listeService = {
     return response.json();
   },
 
-  async creerListe(nomListe: string): Promise<void> {
+  async creerListe(nomListe: string, publique: boolean): Promise<void> {
     const response = await fetch(`${API_BASE_URL}/api/liste/creer`, {
       method: "POST",
       headers: getHeaders(),
       credentials: "include",
-      body: JSON.stringify({ nomListe }),
+      body: JSON.stringify({ nomListe, publique }),
     });
     if (!response.ok) throw new Error("Erreur lors de la création");
+  },
+
+  async updatePublique(idListe: number, publique: boolean): Promise<void> {
+    const response = await fetch(`${API_BASE_URL}/api/liste/${idListe}/publique`, {
+      method: "PUT",
+      headers: getHeaders(),
+      credentials: "include",
+      body: JSON.stringify({ publique }),
+    });
+    if (!response.ok) throw new Error("Erreur de modification de la visibilité");
+  },
+
+  async getPublicListes(recherche?: string): Promise<ListesDto> {
+    const query = recherche ? `?recherche=${encodeURIComponent(recherche)}` : "";
+    const response = await fetch(`${API_BASE_URL}/api/liste/publiques${query}`, {
+      method: "GET",
+      headers: getHeaders(),
+      credentials: "include",
+    });
+    if (!response.ok) throw new Error(`Erreur (${response.status})`);
+    return response.json();
   },
 
   async supprimerListe(idListe: number): Promise<void> {
