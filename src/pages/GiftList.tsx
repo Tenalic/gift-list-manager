@@ -25,7 +25,7 @@ export default function GiftList() {
       setNouveauNom("");
       setShowModal(false);
       refresh(); // On rafraîchit la vue pour voir la nouvelle liste
-    } catch (err) {
+    } catch {
       alert("Erreur lors de la création de la liste");
     } finally {
       setCreationLoading(false);
@@ -38,7 +38,7 @@ export default function GiftList() {
     try {
       await listeService.supprimerListe(idListe);
       refresh();
-    } catch (err) {
+    } catch {
       alert("Erreur lors de la suppression de la liste");
     }
   };

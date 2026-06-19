@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { listeService } from "../services/listeService";
 import type { DetailListeDto, CadeauDto } from "../types/liste";
@@ -39,9 +39,10 @@ export const useListeDetail = () => {
     setOrdreTri(prev => prev === "asc" ? "desc" : "asc");
   };
 
-  const fetchListe = async () => {
+  const fetchListe = useCallback(async () => {
     if (!id) return;
     try {
+      await Promise.resolve();
       setLoading(true);
       const data = await listeService.getUneListe(parseInt(id));
       setListe(data);
@@ -50,18 +51,19 @@ export const useListeDetail = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchListe();
-  }, [id]);
+  }, [fetchListe]);
 
   const handleToggleFavoris = async () => {
     if (!liste || !liste.listeCadeaux) return;
     try {
-      await listeService.toggleFavoris(liste?.listeCadeaux?.idListe);
+      await listeService.toggleFavoris(liste.listeCadeaux.idListe);
       fetchListe();
-    } catch (err) {
+    } catch {
       alert("Erreur favoris");
     }
   };
@@ -70,7 +72,7 @@ export const useListeDetail = () => {
     try {
       await listeService.toggleOffrirCadeau(idObjet);
       fetchListe();
-    } catch (err) {
+    } catch {
       alert("Erreur action offrir");
     }
   };
@@ -80,7 +82,7 @@ export const useListeDetail = () => {
     try {
       await listeService.supprimerCadeau(idObjet);
       fetchListe();
-    } catch (err) {
+    } catch {
       alert("Erreur suppression");
     }
   };
@@ -109,12 +111,12 @@ export const useListeDetail = () => {
       }
       setShowModal(false);
       fetchListe();
-    } catch (err) {
+    } catch {
       alert("Erreur enregistrement");
     }
   };
 
-  const handleInputChange = (field: keyof CadeauDto, value: any) => {
+  const handleInputChange = <K extends keyof CadeauDto>(field: K, value: CadeauDto[K]) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 

@@ -41,7 +41,7 @@ export function useInscription() {
         login(result?.pseudo || '');
         navigate("/");
       }
-    } catch (err) {
+    } catch {
       setErreur("Une erreur technique est survenue.");
     } finally {
       setLoading(false);

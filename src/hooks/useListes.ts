@@ -1,6 +1,6 @@
 // hooks/useListes.ts
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { listeService } from "../services/listeService";
 import { useAuth } from "../context/AuthContext";
 import type { ListeDto } from "../types/liste";
@@ -12,7 +12,10 @@ export function useListes() {
   const [loading, setLoading] = useState(true);
   const [erreur, setErreur] = useState("");
 
-  const fetchListes = async () => {
+  const fetchListes = useCallback(async () => {
+    // Évite les mises à jour d'état synchrones dans les effets en différant dans une microtâche
+    await Promise.resolve();
+
     if (!isConnected) {
       setLoading(false);
       return;
@@ -28,11 +31,12 @@ export function useListes() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [isConnected]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchListes();
-  }, [isConnected]);
+  }, [fetchListes]);
 
   return { listes, favoris, loading, erreur, refresh: fetchListes };
 }

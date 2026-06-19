@@ -175,7 +175,7 @@ export const authService = {
         method: "GET",
         credentials: "include",
       });
-      if (response.ok) return {};
+      if (response.ok) return response.json();
       return { erreur: "Non connecté" };
     } catch {
       return { erreur: "Erreur de vérification session" };
