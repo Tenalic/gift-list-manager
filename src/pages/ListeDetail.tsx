@@ -192,7 +192,7 @@ export default function ListeDetail() {
                     <select
                       className="form-select"
                       value={formData.valuePriorite}
-                      onChange={(e) => handleInputChange("valuePriorite", e.target.value)}
+                      onChange={(e) => handleInputChange("valuePriorite", parseInt(e.target.value, 10))}
                     >
                       <option value="5">❤️</option>
                       <option value="4">❤️❤️</option>
