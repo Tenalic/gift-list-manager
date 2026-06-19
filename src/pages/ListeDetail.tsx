@@ -35,8 +35,8 @@ export default function ListeDetail() {
         <div className="alert alert-info shadow-sm mb-4" role="alert">
           <h4 className="alert-heading">Mode Invité</h4>
           <p className="mb-0">
-            Vous consultez cette liste en tant qu'invité. 
-            <Link to={`/connexion?redirect=/liste/${liste?.listeCadeaux?.idListe}`} className="alert-link mx-1">Connectez-vous</Link> 
+            Vous consultez cette liste en tant qu'invité.
+            <Link to={`/connexion?redirect=/liste/${liste?.listeCadeaux?.idListe}`} className="alert-link mx-1">Connectez-vous</Link>
             pour pouvoir offrir des cadeaux et participer à la liste !
           </p>
         </div>
@@ -46,14 +46,14 @@ export default function ListeDetail() {
           <button className="btn btn-link p-0 mb-2" onClick={() => navigate("/mes-listes")}>
             &larr; Retour à mes listes
           </button>
-          <h1>{liste.nomListe}</h1>
+          <h1>{liste?.listeCadeaux?.nomListe}</h1>
           <p className="text-muted">Propriétaire : {liste?.listeCadeaux?.proprietaire}</p>
         </div>
         <div className="d-flex gap-2">
           {liste.estProprietaire && (
             <>
-              <button 
-                className={`btn ${liste?.listeCadeaux?.publique ? 'btn-success' : 'btn-secondary'}`} 
+              <button
+                className={`btn ${liste?.listeCadeaux?.publique ? 'btn-success' : 'btn-secondary'}`}
                 onClick={handleTogglePublique}
                 title={liste?.listeCadeaux?.publique ? "Cliquez pour rendre privée" : "Cliquez pour rendre publique"}
               >
@@ -135,10 +135,10 @@ export default function ListeDetail() {
                     }}
                     disabled={isConnected && objet.estPrit && (objet.pseudoDetenteur !== pseudo && objet.detenteur !== pseudo)}
                   >
-                    {!isConnected 
-                      ? "Connectez-vous pour offrir" 
-                      : (objet.pseudoDetenteur === pseudo || objet.detenteur === pseudo) 
-                        ? "Ne plus offrir" 
+                    {!isConnected
+                      ? "Connectez-vous pour offrir"
+                      : (objet.pseudoDetenteur === pseudo || objet.detenteur === pseudo)
+                        ? "Ne plus offrir"
                         : (objet.estPrit ? "Déjà offert" : "Offrir")}
                   </button>
                 )}
