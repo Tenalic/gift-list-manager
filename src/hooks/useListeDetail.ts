@@ -10,6 +10,8 @@ export const useListeDetail = () => {
   const [loading, setLoading] = useState(true);
   const [erreur, setErreur] = useState("");
   const [ordreTri, setOrdreTri] = useState<"asc" | "desc">("asc");
+  const [isEditingNom, setIsEditingNom] = useState(false);
+  const [nouveauNom, setNouveauNom] = useState("");
 
   // État pour le formulaire d'ajout/modification
   const [editingObjet, setEditingObjet] = useState<CadeauDto | null>(null);
@@ -137,6 +139,25 @@ export const useListeDetail = () => {
       .catch(() => alert("Erreur lors de la copie du lien"));
   };
 
+  const startEditingNom = () => {
+    if (liste?.listeCadeaux) {
+      setNouveauNom(liste.listeCadeaux.nomListe);
+      setIsEditingNom(true);
+    }
+  };
+
+  const handleModifierNom = async (nom: string) => {
+    if (!liste?.listeCadeaux) return;
+    if (!nom.trim()) return;
+    try {
+      await listeService.modifierNom(liste.listeCadeaux.idListe, nom.trim());
+      setIsEditingNom(false);
+      fetchListe();
+    } catch {
+      alert("Erreur lors de la modification du nom de la liste");
+    }
+  };
+
   return {
     liste: sortedListe,
     loading,
@@ -155,6 +176,12 @@ export const useListeDetail = () => {
     closeModal,
     handleSubmit,
     handleInputChange,
-    copyLinkToClipboard
+    copyLinkToClipboard,
+    isEditingNom,
+    nouveauNom,
+    setNouveauNom,
+    setIsEditingNom,
+    startEditingNom,
+    handleModifierNom
   };
 };

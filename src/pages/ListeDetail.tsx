@@ -23,6 +23,12 @@ export default function ListeDetail() {
     handleSubmit,
     handleInputChange,
     copyLinkToClipboard,
+    isEditingNom,
+    nouveauNom,
+    setNouveauNom,
+    setIsEditingNom,
+    startEditingNom,
+    handleModifierNom,
   } = useListeDetail();
 
   if (loading) return <div className="container py-5 text-center">Chargement...</div>;
@@ -46,7 +52,33 @@ export default function ListeDetail() {
           <button className="btn btn-link p-0 mb-2" onClick={() => navigate("/mes-listes")}>
             &larr; Retour à mes listes
           </button>
-          <h1>{liste?.listeCadeaux?.nomListe}</h1>
+          {isEditingNom ? (
+            <form onSubmit={(e) => { e.preventDefault(); handleModifierNom(nouveauNom); }} className="d-flex align-items-center gap-2 mb-2">
+              <input
+                type="text"
+                className="form-control form-control-lg"
+                value={nouveauNom}
+                onChange={(e) => setNouveauNom(e.target.value)}
+                required
+                autoFocus
+              />
+              <button type="submit" className="btn btn-success btn-sm">Enregistrer</button>
+              <button type="button" className="btn btn-secondary btn-sm" onClick={() => setIsEditingNom(false)}>Annuler</button>
+            </form>
+          ) : (
+            <div className="d-flex align-items-center gap-2 mb-2">
+              <h1 className="mb-0">{liste?.listeCadeaux?.nomListe}</h1>
+              {liste.estProprietaire && (
+                <button
+                  className="btn btn-outline-secondary btn-sm border-0"
+                  onClick={startEditingNom}
+                  title="Modifier le nom de la liste"
+                >
+                  ✏️
+                </button>
+              )}
+            </div>
+          )}
           <p className="text-muted">Propriétaire : {liste?.listeCadeaux?.proprietaire}</p>
         </div>
         <div className="d-flex gap-2">

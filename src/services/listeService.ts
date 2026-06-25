@@ -45,6 +45,17 @@ export const listeService = {
     if (!response.ok) throw new Error("Erreur de modification de la visibilité");
   },
 
+  async modifierNom(idListe: number, nomListe: string): Promise<void> {
+    const response = await fetch(`${API_BASE_URL}/api/liste/${idListe}/nom`, {
+      method: "PUT",
+      headers: getHeaders(),
+      credentials: "include",
+      body: JSON.stringify({ nomListe }),
+    });
+    if (!response.ok) throw new Error("Erreur de modification du nom de la liste");
+  },
+
+
   async getPublicListes(recherche?: string): Promise<ListesDto> {
     const query = recherche ? `?recherche=${encodeURIComponent(recherche)}` : "";
     const response = await fetch(`${API_BASE_URL}/api/liste/publiques${query}`, {
