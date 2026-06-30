@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import { ThemeProvider } from "./context/ThemeContext";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import { useTheme } from "./hooks/useTheme";
@@ -17,8 +18,8 @@ import PublicLists from "./pages/PublicLists";
 
 // App.tsx est le point d'entrée de ton app React.
 // Il remplace le rôle du dispatcher Spring MVC (les @GetMapping de tes controllers).
-export default function App() {
-  useTheme();
+function AppContent() {
+  useTheme(); // Applique le thème initialement et écoute
 
   return (
     // AuthProvider enveloppe tout : isConnected sera accessible partout
@@ -51,3 +52,12 @@ export default function App() {
     </AuthProvider>
   );
 }
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
+  );
+}
+

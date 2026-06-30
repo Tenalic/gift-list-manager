@@ -36,107 +36,88 @@ export default function PublicLists() {
   };
 
   return (
-    <main className="container py-5">
-      {/* En-tête accrocheur avec un dégradé subtil en arrière-plan */}
-      <div className="p-5 mb-4 bg-body-tertiary rounded-3 text-center border shadow-sm position-relative overflow-hidden">
-        <div className="position-absolute top-0 start-0 w-100 h-100 bg-gradient opacity-10" style={{ backgroundImage: "linear-gradient(135deg, var(--accent) 0%, transparent 100%)" }}></div>
-        <h1 className="display-5 fw-bold mb-3">Rechercher des Listes Publiques</h1>
-        <p className="col-md-8 mx-auto fs-5 text-muted mb-4">
+    <main className="container py-5" style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 1.5rem" }}>
+      {/* En-tête de recherche */}
+      <div className="card-gaming text-center" style={{ padding: "3rem 1.5rem", marginBottom: "2.5rem" }}>
+        <h1 className="home-gaming-title" style={{ fontSize: "2.5rem" }}>Listes Publiques</h1>
+        <p className="home-gaming-subtitle" style={{ marginBottom: "2rem" }}>
           Trouvez les listes de cadeaux partagées par vos amis et vos proches pour leur offrir le cadeau idéal.
         </p>
 
-        {/* Formulaire de recherche moderne */}
-        <form onSubmit={handleSearchSubmit} className="d-flex justify-content-center mx-auto" style={{ maxWidth: "500px" }}>
-          <div className="input-group input-group-lg shadow-sm rounded">
+        {/* Formulaire de recherche */}
+        <form onSubmit={handleSearchSubmit} style={{ display: "flex", justifyContent: "center", margin: "0 auto", maxWidth: "550px" }}>
+          <div style={{ display: "flex", width: "100%", gap: "0.5rem" }}>
             <input
               type="text"
-              className="form-control border-end-0 bg-body"
+              className="form-gaming-input"
+              style={{ flex: 1 }}
               placeholder="Rechercher par nom de liste ou pseudo..."
               value={recherche}
               onChange={(e) => setRecherche(e.target.value)}
               aria-label="Recherche"
             />
-            <button className="btn btn-primary px-4" type="submit" disabled={loading}>
-              {loading ? (
-                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-              ) : (
-                "🔍 Rechercher"
-              )}
+            <button className="btn-gaming btn-gaming-primary" type="submit" disabled={loading} style={{ padding: "0.75rem 1.5rem" }}>
+              {loading ? "Recherche..." : "🔍 Chercher"}
             </button>
           </div>
         </form>
       </div>
 
       {erreur && (
-        <div className="alert alert-warning text-center shadow-sm" role="alert">
-          {erreur}
+        <div className="alert-gaming alert-gaming-danger" role="alert" style={{ maxWidth: "600px", margin: "0 auto 2rem auto" }}>
+          <span>⚠️ {erreur}</span>
         </div>
       )}
 
       {loading ? (
-        <div className="text-center py-5">
-          <div className="spinner-border text-primary" role="status" style={{ width: "3rem", height: "3rem" }}>
-            <span className="visually-hidden">Chargement...</span>
-          </div>
+        <div className="loader-gaming-container">
+          <div className="spinner-gaming"></div>
+          <p className="home-gaming-text-small">Recherche dans le grimoire des listes...</p>
         </div>
       ) : listes?.lisOfListesCadeaux?.length === 0 ? (
-        <div className="card text-center p-5 border-dashed bg-transparent shadow-sm">
-          <div className="card-body">
-            <h3 className="h5 text-muted mb-3">Aucune liste publique trouvée</h3>
-            <p className="text-muted mb-0">
-              {recherche 
-                ? "Essayez d'autres mots clés comme le nom de la liste ou le pseudo du propriétaire."
-                : "Il n'y a pas encore de liste publique disponible sur la plateforme."}
-            </p>
-            {recherche && (
-              <button className="btn btn-outline-secondary mt-3 btn-sm" onClick={() => { setRecherche(""); fetchPublicListes(""); }}>
-                Réinitialiser la recherche
-              </button>
-            )}
-          </div>
+        <div className="card-gaming text-center p-5" style={{ maxWidth: "700px", margin: "0 auto" }}>
+          <h3 style={{ color: "var(--text-secondary)", fontSize: "1.25rem", marginBottom: "1rem" }}>Aucune liste publique trouvée</h3>
+          <p className="home-gaming-text-small" style={{ marginBottom: "1.5rem" }}>
+            {recherche 
+              ? "Essayez d'autres mots clés comme le nom de la liste ou le pseudo du propriétaire."
+              : "Il n'y a pas encore de liste publique disponible sur la plateforme."}
+          </p>
+          {recherche && (
+            <button className="btn-gaming btn-gaming-outline btn-sm" onClick={() => { setRecherche(""); fetchPublicListes(""); }}>
+              Réinitialiser la recherche
+            </button>
+          )}
         </div>
       ) : (
-        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <div className="gaming-grid">
           {listes?.lisOfListesCadeaux?.map((liste) => (
-            <div key={liste.idListe} className="col">
-              <div 
-                className="card h-100 shadow-sm border-0 bg-body-tertiary transition-transform" 
-                style={{ 
-                  transition: "transform 0.2s, box-shadow 0.2s",
-                  cursor: "pointer"
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-4px)";
-                  e.currentTarget.style.boxShadow = "var(--shadow)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "";
-                }}
-              >
-                <div className="card-body d-flex flex-column">
-                  <div className="d-flex justify-content-between align-items-start mb-2">
-                    <h5 className="card-title fw-bold mb-0">{liste.nomListe}</h5>
-                    <span className="badge bg-success">🌍 Publique</span>
-                  </div>
-                  <p className="card-text text-muted mb-3 small">
-                    Créée par : <strong>  {liste.pseudoProprietaire || liste.proprietaire}</strong>
-                  </p>
-                  
-                  <div className="mt-auto d-flex justify-content-between align-items-center">
-                    <span className="text-muted small">
-                      🎁 {liste.nombreObjet || 0} cadeau(x)
-                    </span>
-                    <Link to={`/liste/${liste.idListe}`} className="btn btn-outline-primary btn-sm px-3">
-                      Voir la liste &rarr;
-                    </Link>
-                  </div>
-                </div>
+            <article 
+              key={liste.idListe} 
+              className="card-gaming"
+              style={{ display: "flex", flexDirection: "column", minHeight: "180px" }}
+            >
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", marginBottom: "1rem" }}>
+                <h3 style={{ fontSize: "1.2rem", margin: 0, color: "var(--text-primary)" }}>{liste.nomListe}</h3>
+                <span className="badge-gaming badge-gaming-success">🌍 Publique</span>
               </div>
-            </div>
+              
+              <p className="home-gaming-text-small" style={{ margin: "0 0 1.5rem 0", color: "var(--text-secondary)" }}>
+                Créée par : <strong>{liste.pseudoProprietaire || liste.proprietaire}</strong>
+              </p>
+              
+              <div style={{ marginTop: "auto", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <span style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>
+                  🎁 {liste.nombreObjet || 0} cadeau(x)
+                </span>
+                <Link to={`/liste/${liste.idListe}`} className="btn-gaming btn-gaming-outline" style={{ padding: "0.4rem 0.8rem", fontSize: "0.75rem" }}>
+                  Voir la liste &rarr;
+                </Link>
+              </div>
+            </article>
           ))}
         </div>
       )}
     </main>
   );
 }
+

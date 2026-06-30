@@ -31,46 +31,73 @@ export default function ListeDetail() {
     handleModifierNom,
   } = useListeDetail();
 
-  if (loading) return <div className="container py-5 text-center">Chargement...</div>;
-  if (erreur) return <div className="container py-5 alert alert-danger">{erreur}</div>;
+  if (loading) return (
+    <main className="home-gaming-container">
+      <div className="loader-gaming-container">
+        <div className="spinner-gaming"></div>
+        <p className="home-gaming-text-small">Chargement des détails de la liste...</p>
+      </div>
+    </main>
+  );
+
+  if (erreur) return (
+    <main className="home-gaming-container">
+      <div style={{ width: "100%", maxWidth: "700px" }}>
+        <div className="alert-gaming alert-gaming-danger" role="alert">
+          <span>⚠️ {erreur}</span>
+        </div>
+      </div>
+    </main>
+  );
+
   if (!liste) return null;
 
   return (
-    <main className="container py-5">
+    <main className="container py-5" style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 1.5rem" }}>
+      {/* Alerte mode invité */}
       {!isConnected && (
-        <div className="alert alert-info shadow-sm mb-4" role="alert">
-          <h4 className="alert-heading">Mode Invité</h4>
-          <p className="mb-0">
-            Vous consultez cette liste en tant qu'invité.
-            <Link to={`/connexion?redirect=/liste/${liste?.listeCadeaux?.idListe}`} className="alert-link mx-1">Connectez-vous</Link>
-            pour pouvoir offrir des cadeaux et participer à la liste !
-          </p>
+        <div className="alert-gaming alert-gaming-info" role="alert" style={{ marginBottom: "2rem" }}>
+          <span style={{ fontSize: "1.25rem" }}>🛡️</span>
+          <div>
+            <strong>Mode Invité :</strong> Vous consultez cette liste en tant qu'invité.
+            <Link to={`/connexion?redirect=/liste/${liste?.listeCadeaux?.idListe}`} className="link-gaming" style={{ margin: "0 0.25rem", fontWeight: "bold" }}>Connectez-vous</Link>
+            pour pouvoir offrir des cadeaux et participer !
+          </div>
         </div>
       )}
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <div>
-          <button className="btn btn-link p-0 mb-2" onClick={() => navigate("/mes-listes")}>
+
+      {/* En-tête de la liste */}
+      <header className="gaming-flex-header" style={{ borderBottom: "1px solid var(--border-color)", paddingBottom: "1.5rem", marginBottom: "2rem" }}>
+        <div style={{ flex: 1, minWidth: "280px" }}>
+          <button 
+            className="btn-gaming btn-gaming-outline" 
+            style={{ padding: "0.3rem 0.75rem", fontSize: "0.75rem", marginBottom: "1rem" }} 
+            onClick={() => navigate("/mes-listes")}
+          >
             &larr; Retour à mes listes
           </button>
+
           {isEditingNom ? (
-            <form onSubmit={(e) => { e.preventDefault(); handleModifierNom(nouveauNom); }} className="d-flex align-items-center gap-2 mb-2">
+            <form onSubmit={(e) => { e.preventDefault(); handleModifierNom(nouveauNom); }} style={{ display: "flex", gap: "0.5rem", alignItems: "center", maxWidth: "450px" }}>
               <input
                 type="text"
-                className="form-control form-control-lg"
+                className="form-gaming-input"
+                style={{ fontSize: "1.25rem", padding: "0.5rem 0.75rem" }}
                 value={nouveauNom}
                 onChange={(e) => setNouveauNom(e.target.value)}
                 required
                 autoFocus
               />
-              <button type="submit" className="btn btn-success btn-sm">Enregistrer</button>
-              <button type="button" className="btn btn-secondary btn-sm" onClick={() => setIsEditingNom(false)}>Annuler</button>
+              <button type="submit" className="btn-gaming btn-gaming-primary" style={{ padding: "0.5rem 1rem", fontSize: "0.8rem" }}>Enregistrer</button>
+              <button type="button" className="btn-gaming btn-gaming-secondary" style={{ padding: "0.5rem 1rem", fontSize: "0.8rem" }} onClick={() => setIsEditingNom(false)}>Annuler</button>
             </form>
           ) : (
-            <div className="d-flex align-items-center gap-2 mb-2">
-              <h1 className="mb-0">{liste?.listeCadeaux?.nomListe}</h1>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+              <h1 className="home-gaming-title" style={{ fontSize: "2rem", margin: 0 }}>{liste?.listeCadeaux?.nomListe}</h1>
               {liste.estProprietaire && (
                 <button
-                  className="btn btn-outline-secondary btn-sm border-0"
+                  className="btn-gaming btn-gaming-secondary"
+                  style={{ padding: "0.3rem 0.5rem", border: "none", fontSize: "0.85rem" }}
                   onClick={startEditingNom}
                   title="Modifier le nom de la liste"
                 >
@@ -79,85 +106,114 @@ export default function ListeDetail() {
               )}
             </div>
           )}
-          <p className="text-muted">Propriétaire : {liste?.listeCadeaux?.proprietaire}</p>
+          <p className="home-gaming-text-small" style={{ margin: "0.25rem 0 0 0" }}>
+            Propriétaire : <strong>{liste?.listeCadeaux?.proprietaire}</strong>
+          </p>
         </div>
-        <div className="d-flex gap-2">
+
+        {/* Actions principales de la liste */}
+        <div style={{ display: "flex", gap: "0.75rem", alignSelf: "end" }}>
           {liste.estProprietaire && (
             <>
               <button
-                className={`btn ${liste?.listeCadeaux?.publique ? 'btn-success' : 'btn-secondary'}`}
+                className={`btn-gaming ${liste?.listeCadeaux?.publique ? 'btn-gaming-primary' : 'btn-gaming-secondary'}`}
+                style={{ padding: "0.5rem 1rem", fontSize: "0.8rem" }}
                 onClick={handleTogglePublique}
                 title={liste?.listeCadeaux?.publique ? "Cliquez pour rendre privée" : "Cliquez pour rendre publique"}
               >
                 {liste?.listeCadeaux?.publique ? "🌍 Publique" : "🔒 Privée"}
               </button>
-              <button className="btn btn-outline-primary" onClick={copyLinkToClipboard}>
-                🔗 Partager la liste
+              <button className="btn-gaming btn-gaming-outline" style={{ padding: "0.5rem 1rem", fontSize: "0.8rem" }} onClick={copyLinkToClipboard}>
+                🔗 Partager
               </button>
             </>
           )}
           {!liste.estProprietaire && isConnected && (
             <button
-              className={`btn ${liste.estEnFavoris ? 'btn-warning' : 'btn-outline-warning'}`}
+              className={`btn-gaming ${liste.estEnFavoris ? 'btn-gaming-primary' : 'btn-gaming-outline'}`}
+              style={{ padding: "0.5rem 1rem", fontSize: "0.8rem" }}
               onClick={handleToggleFavoris}
             >
-              {liste.estEnFavoris ? "⭐ En favoris" : "☆ Ajouter aux favoris"}
+              {liste.estEnFavoris ? "⭐ Favoris" : "☆ Favoris"}
             </button>
           )}
         </div>
-      </div>
+      </header>
 
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h2>Cadeaux</h2>
-        <div className="d-flex gap-2">
-          <button className="btn btn-outline-secondary" onClick={toggleTri}>
+      {/* Titre Cadeaux & Filtres */}
+      <div className="gaming-flex-header" style={{ marginBottom: "1.5rem" }}>
+        <h2 style={{ fontSize: "1.5rem", color: "var(--text-primary)", margin: 0 }}>Grimoire des Cadeaux</h2>
+        <div style={{ display: "flex", gap: "0.75rem" }}>
+          <button className="btn-gaming btn-gaming-secondary" style={{ padding: "0.5rem 1rem", fontSize: "0.8rem" }} onClick={toggleTri}>
             Trier par priorité {ordreTri === "asc" ? "▲" : "▼"}
           </button>
           {liste.estProprietaire && (
-            <button className="btn btn-primary" onClick={() => openModal()}>
+            <button className="btn-gaming btn-gaming-primary" style={{ padding: "0.5rem 1rem", fontSize: "0.8rem" }} onClick={() => openModal()}>
               + Ajouter un objet
             </button>
           )}
         </div>
       </div>
 
-      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        {liste.listeCadeaux?.listeObjet?.map((objet) => (
-          <div key={objet.idObjet} className="col">
-            <div className="card h-100 shadow-sm">
-              <div className="card-body">
-                <div className="d-flex justify-content-between align-items-start">
-                  <h5 className="card-title">{objet.titre}</h5>
-                </div>
-                <span className="fs-4">{objet.priorite}</span>
-                <p className="card-text">{objet.description}</p>
-                {objet.url && (
-                  <a href={objet.url} target="_blank" rel="noopener noreferrer" className="btn btn-link btn-sm p-0">
-                    Voir le site
-                  </a>
-                )}
-                <div className="mt-3">
-                  {!liste.estProprietaire && isConnected && (
-                    objet.estPrit ? (
-                      <span className="badge bg-success">Offert par {objet.pseudoDetenteur || objet.detenteur || "quelqu'un"}</span>
-                    ) : (
-                      <span className="badge bg-light text-dark">Libre</span>
-                    )
-                  )}
-                  {!isConnected && (
-                    <span className="badge bg-light text-muted">Statut invisible (invité)</span>
-                  )}
-                </div>
+      {/* Grille de Cadeaux */}
+      {liste.listeCadeaux?.listeObjet?.length === 0 ? (
+        <div className="card-gaming p-5 text-center">
+          <p className="home-gaming-text-small" style={{ margin: 0 }}>Aucun cadeau n'a encore été ajouté à cette liste.</p>
+        </div>
+      ) : (
+        <div className="gaming-grid">
+          {liste.listeCadeaux?.listeObjet?.map((objet) => (
+            <article key={objet.idObjet} className="card-gaming" style={{ display: "flex", flexDirection: "column", minHeight: "220px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", marginBottom: "0.5rem" }}>
+                <h3 style={{ fontSize: "1.25rem", margin: 0, color: "var(--text-primary)" }}>{objet.titre}</h3>
+                
+                {/* Priorité sous forme de coeurs */}
+                <span title={`Priorité: ${objet.priorite}`}>
+                  {Array.from({ length: 6 - (parseInt(objet.priorite, 10) || 5) }).map((_, i) => (
+                    <span key={i} style={{ color: "var(--danger)" }}>❤️</span>
+                  ))}
+                </span>
               </div>
-              <div className="card-footer bg-transparent border-top-0">
+
+              <p className="home-gaming-text-small" style={{ color: "var(--text-secondary)", marginBottom: "1rem", flexGrow: 1 }}>
+                {objet.description || "Aucune description fournie."}
+              </p>
+
+              {objet.url && (
+                <div style={{ marginBottom: "1rem" }}>
+                  <a href={objet.url} target="_blank" rel="noopener noreferrer" className="link-gaming" style={{ fontSize: "0.85rem" }}>
+                    Visiter le site marchand &rarr;
+                  </a>
+                </div>
+              )}
+
+              {/* État d'attribution du cadeau */}
+              <div style={{ marginBottom: "1.5rem" }}>
+                {!liste.estProprietaire && isConnected && (
+                  objet.estPrit ? (
+                    <span className="badge-gaming badge-gaming-success">
+                      Offert par {objet.pseudoDetenteur || objet.detenteur || "quelqu'un"}
+                    </span>
+                  ) : (
+                    <span className="badge-gaming badge-gaming-muted">Libre</span>
+                  )
+                )}
+                {!isConnected && (
+                  <span className="badge-gaming badge-gaming-muted" style={{ opacity: 0.7 }}>Statut invisible (invité)</span>
+                )}
+              </div>
+
+              {/* Pied de la carte / Boutons d'action */}
+              <div style={{ marginTop: "auto" }}>
                 {liste.estProprietaire ? (
-                  <div className="btn-group w-100">
-                    <button className="btn btn-outline-secondary btn-sm" onClick={() => openModal(objet)}>Modifier</button>
-                    <button className="btn btn-outline-danger btn-sm" onClick={() => objet.idObjet && handleDeleteObjet(objet.idObjet)}>Supprimer</button>
+                  <div className="btn-group-gaming">
+                    <button className="btn-gaming btn-gaming-secondary" style={{ padding: "0.4rem" }} onClick={() => openModal(objet)}>Modifier</button>
+                    <button className="btn-gaming btn-gaming-danger" style={{ padding: "0.4rem" }} onClick={() => objet.idObjet && handleDeleteObjet(objet.idObjet)}>Supprimer</button>
                   </div>
                 ) : (
                   <button
-                    className={`btn btn-sm w-100 ${!isConnected ? 'btn-outline-secondary' : (objet.estPrit ? (objet.pseudoDetenteur === pseudo || objet.detenteur === pseudo ? 'btn-danger' : 'btn-secondary disabled') : 'btn-success')}`}
+                    className={`btn-gaming w-100 ${!isConnected ? 'btn-gaming-outline' : (objet.estPrit ? (objet.pseudoDetenteur === pseudo || objet.detenteur === pseudo ? 'btn-gaming-danger' : 'btn-gaming-secondary disabled') : 'btn-gaming-primary')}`}
+                    style={{ padding: "0.5rem" }}
                     onClick={() => {
                       if (!isConnected) {
                         navigate(`/connexion?redirect=/liste/${liste.idListe}`);
@@ -168,80 +224,89 @@ export default function ListeDetail() {
                     disabled={isConnected && objet.estPrit && (objet.pseudoDetenteur !== pseudo && objet.detenteur !== pseudo)}
                   >
                     {!isConnected
-                      ? "Connectez-vous pour offrir"
+                      ? "Se connecter pour offrir"
                       : (objet.pseudoDetenteur === pseudo || objet.detenteur === pseudo)
                         ? "Ne plus offrir"
-                        : (objet.estPrit ? "Déjà offert" : "Offrir")}
+                        : (objet.estPrit ? "Déjà offert" : "Offrir ce cadeau")}
                   </button>
                 )}
               </div>
-            </div>
-          </div>
-        ))}
-      </div>
+            </article>
+          ))}
+        </div>
+      )}
 
-      {/* Modal Ajout/Modif */}
+      {/* Modal Ajout/Modification Cadeau */}
       {showModal && (
-        <div className="modal show d-block" tabIndex={-1} style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <div className="modal-dialog">
-            <div className="modal-content">
+        <>
+          <div className="modal-gaming-backdrop" onClick={closeModal} />
+          <div className="modal-gaming-dialog-wrapper">
+            <div className="modal-gaming-content" role="dialog">
               <form onSubmit={handleSubmit}>
-                <div className="modal-header">
-                  <h5 className="modal-title">{editingObjet ? "Modifier l'objet" : "Ajouter un objet"}</h5>
-                  <button type="button" className="btn-close" onClick={closeModal}></button>
+                <div className="modal-gaming-header">
+                  <h5 className="modal-gaming-title">{editingObjet ? "Modifier l'objet" : "Ajouter un objet au grimoire"}</h5>
+                  <button type="button" className="modal-gaming-close" onClick={closeModal}>&times;</button>
                 </div>
-                <div className="modal-body">
-                  <div className="mb-3">
-                    <label className="form-label">Titre</label>
+                
+                <div className="modal-gaming-body">
+                  <div className="form-gaming-group">
+                    <label className="form-gaming-label">Titre du cadeau</label>
                     <input
                       type="text"
-                      className="form-control"
+                      className="form-gaming-input"
                       required
+                      placeholder="Ex: Grimoire de sorts, Console..."
                       value={formData.titre}
                       onChange={(e) => handleInputChange("titre", e.target.value)}
                     />
                   </div>
-                  <div className="mb-3">
-                    <label className="form-label">Description</label>
+
+                  <div className="form-gaming-group">
+                    <label className="form-gaming-label">Description / Détails</label>
                     <textarea
-                      className="form-control"
+                      className="form-gaming-input"
                       rows={3}
+                      placeholder="Indiquez la couleur, la taille, ou tout détail utile..."
                       value={formData.description}
                       onChange={(e) => handleInputChange("description", e.target.value)}
                     ></textarea>
                   </div>
-                  <div className="mb-3">
-                    <label className="form-label">URL</label>
+
+                  <div className="form-gaming-group">
+                    <label className="form-gaming-label">URL du site marchand</label>
                     <input
                       type="url"
-                      className="form-control"
+                      className="form-gaming-input"
+                      placeholder="https://exemple.com/produit"
                       value={formData.url}
                       onChange={(e) => handleInputChange("url", e.target.value)}
                     />
                   </div>
-                  <div className="mb-3">
-                    <label className="form-label">Priorité</label>
+
+                  <div className="form-gaming-group">
+                    <label className="form-gaming-label">Priorité / Rareté</label>
                     <select
-                      className="form-select"
+                      className="form-gaming-input"
                       value={formData.valuePriorite}
                       onChange={(e) => handleInputChange("valuePriorite", parseInt(e.target.value, 10))}
                     >
-                      <option value="5">❤️</option>
-                      <option value="4">❤️❤️</option>
-                      <option value="3">❤️❤️❤️</option>
-                      <option value="2">❤️❤️❤️❤️</option>
-                      <option value="1">❤️❤️❤️❤️❤️</option>
+                      <option value="5">❤️ (Faible)</option>
+                      <option value="4">❤️❤️ (Modérée)</option>
+                      <option value="3">❤️❤️❤️ (Importante)</option>
+                      <option value="2">❤️❤️❤️❤️ (Élevée)</option>
+                      <option value="1">❤️❤️❤️❤️❤️ (Légendaire)</option>
                     </select>
                   </div>
                 </div>
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" onClick={closeModal}>Annuler</button>
-                  <button type="submit" className="btn btn-primary">Enregistrer</button>
+
+                <div className="modal-gaming-footer">
+                  <button type="button" className="btn-gaming btn-gaming-secondary" onClick={closeModal}>Annuler</button>
+                  <button type="submit" className="btn-gaming btn-gaming-primary">Enregistrer</button>
                 </div>
               </form>
             </div>
           </div>
-        </div>
+        </>
       )}
     </main>
   );

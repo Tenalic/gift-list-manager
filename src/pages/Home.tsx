@@ -1,93 +1,93 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-// Ce composant remplace ta page welcome.html
 export default function Home() {
-  // On récupère l'état de connexion depuis le contexte
   const { isConnected } = useAuth();
 
   return (
-    <main className="container my-5 text-center">
-
-      <h1 className="display-4 mb-4">
-        Organisez et partagez votre liste de Noël en toute simplicité !
-      </h1>
-
-      <img
-        className="img-fluid mb-4"
-        src="/images/noel-cadeau.jpg"
-        alt="Liste de cadeaux de Noël : gérez vos idées simplement"
-      />
-
-      <div className="card mx-auto table-container" style={{ maxWidth: "600px" }}>
-
-        {/* th:if="!${connected}" → bloc affiché si NON connecté */}
-        {!isConnected && (
-          <div className="card-body">
-            <p className="mb-4">
-              Bienvenue sur notre site, votre outil parfait pour gérer vos{" "}
-              <strong>listes de cadeaux</strong>, qu'il s'agisse de{" "}
-              <strong>cadeaux de Noël</strong>, d'anniversaires ou d'autres
-              occasions spéciales. Inscrivez-vous dès aujourd'hui pour une
-              expérience simplifiée et conviviale.
-            </p>
-
-            {/* En React, pas de <form action="..."> pour naviguer : on utilise Link */}
-            <div className="mb-3">
-              <Link to="/connexion" className="btn btn-primary">
-                Connexion
-              </Link>
-            </div>
-
-            <p className="mb-4">
-              Pas de compte ? Créez-en un simplement avec le bouton ci-dessous !
-            </p>
-
-            <Link to="/inscription" className="btn btn-secondary">
-              Inscription
-            </Link>
-          </div>
-        )}
-
-        {/* th:if="${connected}" → bloc affiché si connecté */}
-        {isConnected && (
-          <div className="card-body">
-            <p className="mb-4">
-              Bienvenue sur notre site, votre outil parfait pour gérer vos{" "}
-              <strong>listes de cadeaux</strong>, qu'il s'agisse de{" "}
-              <strong>cadeaux de Noël</strong>, d'anniversaires ou d'autres
-              occasions spéciales.
-            </p>
-            <p className="mt-4">
-              Découvrez nos fonctionnalités pour{" "}
-              <Link to="/mes-listes">gérer vos listes de cadeaux</Link>, ou consultez{" "}
-              <Link to="/politique-confidentialite">
-                notre politique de confidentialité
-              </Link>
-              .
-            </p>
-          </div>
-        )}
-      </div>
-
-      {/* Bouton Contact (présent pour tous) */}
-      <div className="mt-4">
-        <Link to="/contact" className="btn btn-outline-secondary">
-          Contact
-        </Link>
-      </div>
-
-      {/* Liens en bas, visibles uniquement si NON connecté */}
-      {!isConnected && (
-        <p className="mt-4">
-          Découvrez nos fonctionnalités pour{" "}
-          <Link to="/mes-listes">gérer vos listes de cadeaux</Link>, ou consultez{" "}
-          <Link to="/politique-confidentialite">
-            notre politique de confidentialité
-          </Link>
-          .
+    <main className="home-gaming-container">
+      <header className="home-gaming-hero">
+        <h1 className="home-gaming-title animate-fade-in">
+          Partagez la magie des cadeaux
+        </h1>
+        <p className="home-gaming-subtitle animate-fade-in-delayed">
+          Organisez vos listes de Noël et d'occasions spéciales en toute simplicité
         </p>
-      )}
+      </header>
+
+      <div className="gaming-divider">
+        <span className="gaming-divider-icon"></span>
+      </div>
+
+      <section className="home-gaming-content">
+        <div className="card-gaming mx-auto" style={{ maxWidth: "620px" }}>
+          
+          {/* Bloc affiché si NON connecté */}
+          {!isConnected && (
+            <div className="home-gaming-body">
+              <p className="home-gaming-text">
+                Bienvenue sur <strong>Gift List</strong>, votre compagnon idéal pour créer, 
+                gérer et partager vos listes de souhaits. Qu'il s'agisse de préparer un Noël féerique, 
+                un anniversaire mémorable ou une fête unique, simplifiez vos préparatifs dès aujourd'hui.
+              </p>
+
+              <div className="home-gaming-actions-group">
+                <Link to="/connexion" className="btn-gaming btn-gaming-primary w-100">
+                  Débuter l'aventure (Connexion)
+                </Link>
+                <div className="home-gaming-or">
+                  <span>ou</span>
+                </div>
+                <Link to="/inscription" className="btn-gaming btn-gaming-secondary w-100">
+                  Créer un compte
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {/* Bloc affiché si connecté */}
+          {isConnected && (
+            <div className="home-gaming-body">
+              <p className="home-gaming-text">
+                Ravi de vous revoir ! Votre grimoire de cadeaux est prêt à être enrichi. 
+                Consultez vos listes existantes ou commencez à planifier vos prochains présents de Noël.
+              </p>
+              
+              <div className="home-gaming-actions-group">
+                <Link to="/mes-listes" className="btn-gaming btn-gaming-primary w-100">
+                  Accéder à mes listes
+                </Link>
+              </div>
+
+              <div className="gaming-divider" style={{ margin: "1.5rem 0" }}></div>
+
+              <p className="home-gaming-text-small">
+                Besoin de revoir vos préférences ou la sécurité de votre compte ? 
+                Visitez notre <Link to="/politique-confidentialite" className="link-gaming">politique de confidentialité</Link>.
+              </p>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Liens secondaires en bas */}
+      <footer className="home-gaming-footer">
+        <Link to="/contact" className="btn-gaming btn-gaming-outline">
+          Contacter les lutins (Support)
+        </Link>
+        
+        {!isConnected && (
+          <p className="home-gaming-footer-text">
+            Découvrez nos fonctionnalités pour{" "}
+            <Link to="/mes-listes" className="link-gaming">gérer vos listes de cadeaux</Link>, ou consultez{" "}
+            <Link to="/politique-confidentialite" className="link-gaming">
+              notre politique de confidentialité
+            </Link>
+            .
+          </p>
+        )}
+      </footer>
     </main>
   );
 }
+

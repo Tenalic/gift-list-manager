@@ -26,10 +26,12 @@ export default function Deconnexion() {
   }, [logout, navigate]);
 
   return (
-    <div className="container py-5 text-center">
+    <div className="loader-gaming-container">
       <h2>Déconnexion en cours...</h2>
-      <div className="spinner-border text-primary" role="status">
-        <span className="visually-hidden">Loading...</span>
+      <div className="spinner-gaming" role="status" aria-live="polite">
+        <span style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clip: "rect(0 0 0 0)" }}>
+          Déconnexion en cours
+        </span>
       </div>
     </div>
   );

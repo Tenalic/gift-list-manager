@@ -11,103 +11,114 @@ export default function Inscription() {
   } = useInscription();
 
   return (
-    <main className="container py-5">
-      <div className="row justify-content-center">
-        <div className="col-md-6 col-lg-5">
-          <div className="card shadow">
-            <div className="card-header bg-primary text-white text-center">
-              <h2>Inscription</h2>
+    <main className="home-gaming-container">
+      <div style={{ width: "100%", maxWidth: "520px" }}>
+        <div className="card-gaming shadow">
+          <header className="home-gaming-hero" style={{ marginBottom: "2rem" }}>
+            <h1 className="home-gaming-title" style={{ fontSize: "2rem" }}>Inscription</h1>
+            <p className="home-gaming-subtitle" style={{ fontSize: "0.95rem" }}>
+              Créez un compte pour commencer à organiser vos listes de cadeaux
+            </p>
+          </header>
+
+          {erreur && (
+            <div className="alert-gaming alert-gaming-danger" role="alert" style={{ marginBottom: "1.5rem" }}>
+              <span style={{ fontSize: "1.1rem" }}>⚠️</span>
+              <span>{erreur}</span>
             </div>
-            <div className="card-body p-4">
-              {erreur && (
-                <div className="alert alert-danger mb-4" role="alert">
-                  {erreur}
-                </div>
-              )}
+          )}
 
-              <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                  <label className="form-label">Pseudo</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    required
-                    value={formData.pseudo}
-                    onChange={(e) => handleInputChange("pseudo", e.target.value)}
-                    placeholder="Votre nom d'utilisateur"
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label">Email</label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    required
-                    value={formData.email}
-                    onChange={(e) => handleInputChange("email", e.target.value)}
-                    placeholder="exemple@email.com"
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label">Mot de passe</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    required
-                    value={formData.password}
-                    onChange={(e) => handleInputChange("password", e.target.value)}
-                  />
-                </div>
-
-                <div className="mb-4">
-                  <label className="form-label">Confirmer le mot de passe</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    required
-                    value={formData.confirmPassword}
-                    onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
-                  />
-                </div>
-
-                <div className="mb-4 form-check">
-                  <input
-                    type="checkbox"
-                    className="form-check-input"
-                    id="acceptCGU"
-                    required
-                    checked={formData.acceptCGU}
-                    onChange={(e) => handleInputChange("acceptCGU", e.target.checked)}
-                  />
-                  <label className="form-check-label" htmlFor="acceptCGU">
-                    J'accepte les <Link to="/cgu" target="_blank" rel="noopener noreferrer">CGU</Link>
-                  </label>
-                </div>
-
-                <div className="text-center">
-                  <button
-                    type="submit"
-                    className="btn btn-success w-100 mb-3"
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <span className="spinner-border spinner-border-sm me-2" role="status"></span>
-                    ) : "S'inscrire"}
-                  </button>
-                </div>
-              </form>
+          <form onSubmit={handleSubmit}>
+            <div className="form-gaming-group">
+              <label className="form-gaming-label">Pseudo</label>
+              <input
+                type="text"
+                className="form-gaming-input"
+                required
+                value={formData.pseudo}
+                onChange={(e) => handleInputChange("pseudo", e.target.value)}
+                placeholder="Votre nom de héros ou de lutin"
+              />
             </div>
 
-            <div className="card-footer text-center">
-              <Link to="/connexion" className="text-decoration-none">
-                Déjà un compte ? Connectez-vous ici
+            <div className="form-gaming-group">
+              <label className="form-gaming-label">Email</label>
+              <input
+                type="email"
+                className="form-gaming-input"
+                required
+                value={formData.email}
+                onChange={(e) => handleInputChange("email", e.target.value)}
+                placeholder="exemple@email.com"
+              />
+            </div>
+
+            <div className="form-gaming-group">
+              <label className="form-gaming-label">Mot de passe</label>
+              <input
+                type="password"
+                className="form-gaming-input"
+                required
+                value={formData.password}
+                onChange={(e) => handleInputChange("password", e.target.value)}
+                placeholder="••••••••"
+              />
+            </div>
+
+            <div className="form-gaming-group">
+              <label className="form-gaming-label">Confirmer le mot de passe</label>
+              <input
+                type="password"
+                className="form-gaming-input"
+                required
+                value={formData.confirmPassword}
+                onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
+                placeholder="••••••••"
+              />
+            </div>
+
+            <div className="form-gaming-group" style={{ margin: "1.5rem 0" }}>
+              <label className="form-gaming-checkbox" htmlFor="acceptCGU">
+                <input
+                  type="checkbox"
+                  id="acceptCGU"
+                  required
+                  checked={formData.acceptCGU}
+                  onChange={(e) => handleInputChange("acceptCGU", e.target.checked)}
+                />
+                <span>
+                  J'accepte les{" "}
+                  <Link to="/cgu" target="_blank" rel="noopener noreferrer" className="link-gaming">
+                    CGU
+                  </Link>
+                </span>
+              </label>
+            </div>
+
+            <div className="text-center" style={{ marginTop: "2rem" }}>
+              <button
+                type="submit"
+                className="btn-gaming btn-gaming-primary w-100"
+                disabled={loading}
+              >
+                {loading ? "Création du compte..." : "S'inscrire"}
+              </button>
+            </div>
+          </form>
+
+          <div className="gaming-divider" style={{ margin: "1.5rem 0" }}></div>
+
+          <div className="text-center">
+            <p className="home-gaming-text-small" style={{ marginBottom: 0 }}>
+              Déjà inscrit ?{" "}
+              <Link to="/connexion" className="link-gaming">
+                Connectez-vous ici
               </Link>
-            </div>
+            </p>
           </div>
         </div>
       </div>
     </main>
   );
 }
+

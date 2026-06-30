@@ -1,5 +1,3 @@
-// pages/GiftList.tsx
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useListes } from "../hooks/useListes";
@@ -47,17 +45,17 @@ export default function GiftList() {
 
   if (!isConnected) {
     return (
-      <main className="container py-5 text-center">
-        <div className="card p-5 shadow-sm border-0 bg-transparent">
-          <h1 className="mb-4">Mes Listes de Cadeaux</h1>
-          <p className="lead mb-4 opacity-75">
+      <main className="home-gaming-container">
+        <div className="card-gaming p-5 text-center" style={{ maxWidth: "700px" }}>
+          <h1 className="home-gaming-title">Mes Listes de Cadeaux</h1>
+          <p className="home-gaming-subtitle mb-4">
             Connectez-vous pour créer, gérer et partager vos listes de cadeaux avec vos proches.
           </p>
-          <div className="d-grid gap-2 d-sm-flex justify-content-sm-center">
-            <Link to="/connexion" className="btn btn-primary btn-lg px-4 gap-3">
+          <div style={{ display: "flex", gap: "1rem", justifyContent: "center", marginTop: "2rem" }}>
+            <Link to="/connexion" className="btn-gaming btn-gaming-primary">
               Se connecter
             </Link>
-            <Link to="/inscription" className="btn btn-outline-secondary btn-lg px-4">
+            <Link to="/inscription" className="btn-gaming btn-gaming-outline">
               Créer un compte
             </Link>
           </div>
@@ -67,92 +65,107 @@ export default function GiftList() {
   }
 
   if (loading) return (
-    <div className="container py-5 text-center">
-      <div className="spinner-border text-primary" role="status">
-        <span className="visually-hidden">Chargement...</span>
+    <main className="home-gaming-container">
+      <div className="loader-gaming-container">
+        <div className="spinner-gaming"></div>
+        <p className="home-gaming-text-small">Chargement de vos listes...</p>
       </div>
-    </div>
+    </main>
   );
 
   if (erreur) return (
-    <div className="container py-5">
-      <div className="alert alert-danger">{erreur}</div>
-    </div>
+    <main className="home-gaming-container">
+      <div style={{ width: "100%", maxWidth: "700px" }}>
+        <div className="alert-gaming alert-gaming-danger" role="alert">
+          <span>⚠️ {erreur}</span>
+        </div>
+      </div>
+    </main>
   );
 
   return (
-    <main className="container py-5">
-      <h1 className="mb-4">Mes Listes de Cadeaux</h1>
+    <main className="container py-5" style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 1.5rem" }}>
+      <header className="gaming-flex-header" style={{ borderBottom: "1px solid var(--border-color)", paddingBottom: "1rem" }}>
+        <div>
+          <h1 className="home-gaming-title" style={{ fontSize: "2.25rem", margin: 0 }}>Mes Listes de Cadeaux</h1>
+          <p className="home-gaming-text-small" style={{ margin: 0 }}>Gérez vos grimoires de cadeaux de Noël et d'anniversaires</p>
+        </div>
+      </header>
 
-      {/* Section Mes Listes (Inversée, maintenant en premier) */}
-      <section className="mb-5">
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <h2 className="h4 text-success">Mes Propres Listes</h2>
-          <button className="btn btn-success btn-sm" onClick={() => setShowModal(true)}>
+      {/* Section Mes Listes */}
+      <section className="mb-5" style={{ marginTop: "2rem" }}>
+        <div className="gaming-flex-header">
+          <h2 style={{ fontSize: "1.5rem", color: "var(--accent-gold)", margin: 0 }}>Mes Propres Listes</h2>
+          <button className="btn-gaming btn-gaming-primary" style={{ padding: "0.5rem 1rem", fontSize: "0.8rem" }} onClick={() => setShowModal(true)}>
             + Créer une liste
           </button>
         </div>
 
         {listes.length === 0 ? (
-          <div className="card p-4 text-center">
-            <p className="mb-0 opacity-75">Vous n'avez pas encore créé de liste.</p>
+          <div className="card-gaming p-4 text-center">
+            <p className="home-gaming-text-small" style={{ margin: 0 }}>Vous n'avez pas encore créé de liste.</p>
           </div>
         ) : (
-          <div className="row row-cols-1 row-cols-md-3 g-4">
+          <div className="gaming-grid">
             {listes.map((liste) => (
-              <div key={liste.idListe} className="col">
-                <div className="card h-100 shadow-sm position-relative">
-                  <div className="card-header bg-transparent d-flex justify-content-between align-items-center">
-                    <h5 className="card-title mb-0">{liste.nomListe}</h5>
-                    <span className={`badge ${liste.publique ? 'bg-success' : 'bg-secondary'}`}>
-                      {liste.publique ? 'Publique' : 'Privée'}
-                    </span>
-                  </div>
-                  <div className="card-body">
-                    <span className="text-muted small">
-                      🎁 {liste.nombreObjet || 0} cadeau(x)
-                    </span>
-                  </div>
-                  <div className="card-footer bg-transparent">
-                    <div className="btn-group w-100">
-                      <Link to={`/liste/${liste.idListe}`} className="btn btn-outline-secondary btn-sm">Gérer</Link>
-                      <button
-                        className="btn btn-outline-danger btn-sm"
-                        onClick={() => handleSupprimerListe(liste.idListe, liste.nomListe)}
-                      >
-                        Supprimer
-                      </button>
-                    </div>
+              <article key={liste.idListe} className="card-gaming" style={{ display: "flex", flexDirection: "column", justifyContent: "between", minHeight: "180px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", marginBottom: "1rem" }}>
+                  <h3 style={{ fontSize: "1.2rem", margin: 0, color: "var(--text-primary)" }}>{liste.nomListe}</h3>
+                  <span className={`badge-gaming ${liste.publique ? 'badge-gaming-success' : 'badge-gaming-muted'}`}>
+                    {liste.publique ? 'Publique' : 'Privée'}
+                  </span>
+                </div>
+                <div style={{ marginBottom: "1.5rem" }}>
+                  <span style={{ color: "var(--text-secondary)", fontSize: "0.9rem" }}>
+                    🎁 {liste.nombreObjet || 0} cadeau(x)
+                  </span>
+                </div>
+                <div style={{ marginTop: "auto" }}>
+                  <div className="btn-group-gaming">
+                    <Link to={`/liste/${liste.idListe}`} className="btn-gaming btn-gaming-secondary" style={{ padding: "0.4rem" }}>Gérer</Link>
+                    <button
+                      className="btn-gaming btn-gaming-danger"
+                      style={{ padding: "0.4rem" }}
+                      onClick={() => handleSupprimerListe(liste.idListe, liste.nomListe)}
+                    >
+                      Supprimer
+                    </button>
                   </div>
                 </div>
-              </div>
+              </article>
             ))}
           </div>
         )}
       </section>
 
-      {/* Section Favoris (Inversée, maintenant en second) */}
-      <section>
-        <h2 className="h4 mb-3 text-primary">Mes Favoris</h2>
+      {/* Section Favoris */}
+      <section style={{ marginTop: "3rem" }}>
+        <h2 style={{ fontSize: "1.5rem", color: "var(--info)", marginBottom: "1.5rem" }}>Mes Favoris</h2>
         {favoris.length === 0 ? (
-          <p className="text-muted italic">Vous n'avez pas encore de listes favorites.</p>
+          <div className="card-gaming p-4 text-center">
+            <p className="home-gaming-text-small" style={{ margin: 0 }}>Vous n'avez pas encore de listes favorites.</p>
+          </div>
         ) : (
-          <div className="row row-cols-1 row-cols-md-3 g-4">
+          <div className="gaming-grid">
             {favoris.map((liste) => (
-              <div key={liste.idListe} className="col">
-                <div className="card h-100 border-primary shadow-sm">
-                  <div className="card-body">
-                    <h5 className="card-title">{liste.nomListe}</h5>
-                    <p className="card-text text-muted small">Propriétaire : {liste.proprietaire}</p>
-                    <span className="text-muted small">
-                      🎁 {liste.nombreObjet || 0} cadeau(x)
-                    </span>
-                  </div>
-                  <div className="card-footer bg-transparent">
-                    <Link to={`/liste/${liste.idListe}`} className="btn btn-outline-primary btn-sm w-100">Voir la liste</Link>
-                  </div>
+              <article key={liste.idListe} className="card-gaming" style={{ display: "flex", flexDirection: "column", minHeight: "180px" }}>
+                <div style={{ marginBottom: "1rem" }}>
+                  <h3 style={{ fontSize: "1.2rem", margin: 0, color: "var(--text-primary)" }}>{liste.nomListe}</h3>
+                  <p className="home-gaming-text-small" style={{ margin: "0.25rem 0 0 0", color: "var(--text-muted)" }}>
+                    Propriétaire : {liste.proprietaire}
+                  </p>
                 </div>
-              </div>
+                <div style={{ marginBottom: "1.5rem" }}>
+                  <span style={{ color: "var(--text-secondary)", fontSize: "0.9rem" }}>
+                    🎁 {liste.nombreObjet || 0} cadeau(x)
+                  </span>
+                </div>
+                <div style={{ marginTop: "auto" }}>
+                  <Link to={`/liste/${liste.idListe}`} className="btn-gaming btn-gaming-outline w-100" style={{ padding: "0.4rem" }}>
+                    Voir la liste
+                  </Link>
+                </div>
+              </article>
             ))}
           </div>
         )}
@@ -160,55 +173,53 @@ export default function GiftList() {
 
       {/* Modale de création de liste */}
       {showModal && (
-        <div className="modal show d-block" tabIndex={-1} style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <div className="modal-dialog">
-            <div className="modal-content shadow">
-              <div className="modal-header">
-                <h5 className="modal-title">Créer une nouvelle liste</h5>
-                <button type="button" className="btn-close" onClick={() => { setShowModal(false); setNouveauPublique(false); }}></button>
+        <>
+          <div className="modal-gaming-backdrop" onClick={() => { setShowModal(false); setNouveauPublique(false); }} />
+          <div className="modal-gaming-dialog-wrapper">
+            <div className="modal-gaming-content" role="dialog">
+              <div className="modal-gaming-header">
+                <h5 className="modal-gaming-title">Créer une nouvelle liste</h5>
+                <button type="button" className="modal-gaming-close" onClick={() => { setShowModal(false); setNouveauPublique(false); }}>&times;</button>
               </div>
               <form onSubmit={handleCreerListe}>
-                <div className="modal-body">
-                  <div className="mb-3">
-                    <label htmlFor="nomListe" className="form-label">Nom de la liste</label>
+                <div className="modal-gaming-body">
+                  <div className="form-gaming-group">
+                    <label htmlFor="nomListe" className="form-gaming-label">Nom de la liste</label>
                     <input
                       type="text"
                       id="nomListe"
-                      className="form-control"
-                      placeholder="Ex: Liste de Noël, Anniversaire..."
+                      className="form-gaming-input"
+                      placeholder="Ex: Liste de Noël, Anniversaire de Maman..."
                       value={nouveauNom}
                       onChange={(e) => setNouveauNom(e.target.value)}
                       required
                       autoFocus
                     />
                   </div>
-                  <div className="form-check mb-3 text-start">
-                    <input
-                      type="checkbox"
-                      id="nouveauPublique"
-                      className="form-check-input"
-                      checked={nouveauPublique}
-                      onChange={(e) => setNouveauPublique(e.target.checked)}
-                    />
-                    <label htmlFor="nouveauPublique" className="form-check-label text-start">
-                      Rendre cette liste publique (visible par tout le monde)
+                  <div className="form-gaming-group" style={{ marginTop: "1.5rem" }}>
+                    <label htmlFor="nouveauPublique" className="form-gaming-checkbox">
+                      <input
+                        type="checkbox"
+                        id="nouveauPublique"
+                        checked={nouveauPublique}
+                        onChange={(e) => setNouveauPublique(e.target.checked)}
+                      />
+                      <span>Rendre cette liste publique (visible par tout le monde)</span>
                     </label>
                   </div>
                 </div>
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" onClick={() => { setShowModal(false); setNouveauPublique(false); }}>Annuler</button>
-                  <button type="submit" className="btn btn-success" disabled={creationLoading}>
-                    {creationLoading ? (
-                      <span className="spinner-border spinner-border-sm me-2" role="status"></span>
-                    ) : null}
-                    Créer la liste
+                <div className="modal-gaming-footer">
+                  <button type="button" className="btn-gaming btn-gaming-secondary" onClick={() => { setShowModal(false); setNouveauPublique(false); }}>Annuler</button>
+                  <button type="submit" className="btn-gaming btn-gaming-primary" disabled={creationLoading}>
+                    {creationLoading ? "Création..." : "Créer la liste"}
                   </button>
                 </div>
               </form>
             </div>
           </div>
-        </div>
+        </>
       )}
     </main>
   );
 }
+
