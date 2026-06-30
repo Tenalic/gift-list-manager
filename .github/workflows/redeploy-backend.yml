@@ -1,0 +1,20 @@
+name: Redeploy Backend
+
+on:
+  workflow_run:
+    workflows:
+      - Build Frontend
+    types:
+      - completed
+
+jobs:
+  redeploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Redeploy backend
+        run: |
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.KOYEB_API_TOKEN }}" \
+            https://app.koyeb.com/v1/services/${{ secrets.KOYEB_SERVICE_ID }}/redeploy
