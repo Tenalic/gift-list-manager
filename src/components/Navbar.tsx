@@ -54,19 +54,9 @@ export default function Navbar() {
 
             {isConnected && (
               <li className="navbar-gaming-item">
-                <Link className="navbar-gaming-link" to="/modifier-mot-de-passe" onClick={closeNavbar}>Mot de passe</Link>
+                <Link className="navbar-gaming-link" to="/mon-compte" onClick={closeNavbar}>Mon compte</Link>
               </li>
             )}
-
-            <li className="navbar-gaming-item">
-              <Link className="navbar-gaming-link" to="/cgu" onClick={closeNavbar}>CGU</Link>
-            </li>
-            <li className="navbar-gaming-item">
-              <Link className="navbar-gaming-link" to="/politique-confidentialite" onClick={closeNavbar}>Confidentialité</Link>
-            </li>
-            <li className="navbar-gaming-item">
-              <Link className="navbar-gaming-link" to="/politique-securite" onClick={closeNavbar}>Sécurité</Link>
-            </li>
 
             {isConnected && (
               <li className="navbar-gaming-item">

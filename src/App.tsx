@@ -1,7 +1,9 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import MonCompte from "./pages/MonCompte";
 import Home from "./pages/Home";
 import { useTheme } from "./hooks/useTheme";
 import Contact from "./pages/Contact";
@@ -13,7 +15,6 @@ import Inscription from "./pages/Inscription";
 import GiftList from "./pages/GiftList";
 import ListeDetail from "./pages/ListeDetail";
 import Deconnexion from "./pages/Deconnexion";
-import ModifierMotDePasse from "./pages/ModifierMotDePasse";
 import PublicLists from "./pages/PublicLists";
 
 // App.tsx est le point d'entrée de ton app React.
@@ -31,21 +32,29 @@ function AppContent() {
         <div className="d-flex flex-column min-vh-100">
           <Navbar />
 
-          {/* Routes = le routeur : selon l'URL, il affiche le bon composant */}
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/cgu" element={<CGU />} />
-            <Route path="/politique-confidentialite" element={<PolitiqueConfidentialite />} />
-            <Route path="/politique-securite" element={<PolitiqueSecurite />} />
-            <Route path="/connexion" element={<Connexion />} />
-            <Route path="/inscription" element={<Inscription />} />
-            <Route path="/deconnexion" element={<Deconnexion />} />
-            <Route path="/modifier-mot-de-passe" element={<ModifierMotDePasse />} />
-            <Route path="/mes-listes" element={<GiftList />} />
-            <Route path="/liste/:id" element={<ListeDetail />} />
-            <Route path="/listes-publiques" element={<PublicLists />} />
-          </Routes>
+          {/* Contenu principal : prend l'espace dispo pour pousser le footer en bas */}
+          <div className="d-flex flex-column flex-grow-1">
+            {/* Routes = le routeur : selon l'URL, il affiche le bon composant */}
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/cgu" element={<CGU />} />
+              <Route path="/politique-confidentialite" element={<PolitiqueConfidentialite />} />
+              <Route path="/politique-securite" element={<PolitiqueSecurite />} />
+              <Route path="/connexion" element={<Connexion />} />
+              <Route path="/inscription" element={<Inscription />} />
+              <Route path="/deconnexion" element={<Deconnexion />} />
+              <Route path="/mon-compte" element={<MonCompte />} />
+              {/* Ancienne route conservée : redirige vers la page Mon compte */}
+              <Route path="/modifier-mot-de-passe" element={<Navigate to="/mon-compte" replace />} />
+              <Route path="/mes-listes" element={<GiftList />} />
+              <Route path="/liste/:id" element={<ListeDetail />} />
+              <Route path="/listes-publiques" element={<PublicLists />} />
+            </Routes>
+          </div>
+
+          {/* Footer global affiché sur toutes les pages */}
+          <Footer />
         </div>
 
       </BrowserRouter>

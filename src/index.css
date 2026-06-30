@@ -388,6 +388,25 @@ a:hover {
 .navbar-gaming-toggler-icon::before { top: -6px; }
 .navbar-gaming-toggler-icon::after { top: 6px; }
 
+/* Styles de base (desktop) — déclarés AVANT la media query mobile
+   pour que l'override mobile (display:none + .show) prenne le dessus. */
+.navbar-gaming-collapse {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-grow: 1;
+  margin-left: 2rem;
+}
+
+.navbar-gaming-nav {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 1.5rem;
+}
+
+/* Override mobile : menu replié par défaut, déplié uniquement avec .show */
 @media (max-width: 991px) {
   .navbar-gaming-toggler {
     display: block;
@@ -412,22 +431,6 @@ a:hover {
   .navbar-gaming-actions {
     margin-top: 0.5rem;
   }
-}
-
-.navbar-gaming-collapse {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-grow: 1;
-  margin-left: 2rem;
-}
-
-.navbar-gaming-nav {
-  display: flex;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  gap: 1.5rem;
 }
 .navbar-gaming-link {
   font-family: var(--font-title);
@@ -814,3 +817,157 @@ select.form-gaming-input {
 
 
 
+
+/* ============================================================
+   FOOTER GLOBAL MULTI-COLONNES
+   ============================================================ */
+.footer-gaming {
+  background: var(--bg-surface);
+  border-top: 2px solid var(--border-color);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.25);
+  padding: 2.5rem 1.5rem 1.5rem;
+  margin-top: auto; /* pousse le footer en bas (parent flex-column min-vh-100) */
+}
+
+.footer-gaming-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+.footer-gaming-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-gaming-heading {
+  font-family: var(--font-title);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent-gold);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.footer-gaming-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.footer-gaming-link {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: var(--transition-smooth);
+}
+.footer-gaming-link:hover,
+.footer-gaming-link:focus-visible {
+  color: var(--accent-gold-hover);
+  text-shadow: 0 0 5px var(--accent-gold-glow);
+}
+.footer-gaming-link:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 3px;
+  border-radius: var(--border-radius-sm);
+}
+
+.footer-gaming-bottom {
+  max-width: 1100px;
+  margin: 2rem auto 0;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.footer-gaming-copyright {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.footer-gaming-legal {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+.footer-gaming-legal-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: var(--transition-smooth);
+}
+.footer-gaming-legal-link:hover,
+.footer-gaming-legal-link:focus-visible {
+  color: var(--accent-gold-hover);
+}
+.footer-gaming-legal-link:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 3px;
+  border-radius: var(--border-radius-sm);
+}
+
+/* Responsive : colonnes empilées sur mobile */
+@media (max-width: 768px) {
+  .footer-gaming-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  .footer-gaming-bottom {
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+  }
+}
+@media (max-width: 420px) {
+  .footer-gaming-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================
+   PAGE MON COMPTE — liste des informations
+   ============================================================ */
+.compte-info-list {
+  margin: 0;
+}
+.compte-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+.compte-info-row:last-child {
+  border-bottom: none;
+}
+.compte-info-label {
+  font-family: var(--font-title);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  margin: 0;
+}
+.compte-info-value {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  margin: 0;
+  text-align: right;
+  word-break: break-word;
+}
