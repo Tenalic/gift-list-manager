@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useAccount } from "../hooks/useAccount";
 import FormulaireMotDePasse from "../components/FormulaireMotDePasse";
@@ -26,7 +26,11 @@ function formaterDate(iso?: string): string {
 
 export default function MonCompte() {
   const { isConnected, pseudo, loading: authLoading } = useAuth();
-  const [ongletActif, setOngletActif] = useState<OngletId>("informations");
+  const [searchParams] = useSearchParams();
+  // Onglet initial pilotable par l'URL (?tab=securite), sinon "informations".
+  const tabParam = searchParams.get("tab");
+  const ongletInitial: OngletId = tabParam === "securite" ? "securite" : "informations";
+  const [ongletActif, setOngletActif] = useState<OngletId>(ongletInitial);
 
   // Tant que la session se vérifie, on évite tout flash de contenu.
   if (authLoading) {

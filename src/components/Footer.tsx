@@ -31,6 +31,7 @@ export default function Footer() {
             {isConnected ? (
               <>
                 <li><Link className="footer-gaming-link" to="/mon-compte">Mon compte</Link></li>
+                <li><Link className="footer-gaming-link" to="/mon-compte?tab=securite">Modifier le mot de passe</Link></li>
                 <li><Link className="footer-gaming-link" to="/deconnexion">Déconnexion</Link></li>
               </>
             ) : (
