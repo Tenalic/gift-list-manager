@@ -455,6 +455,7 @@ a:hover {
 .navbar-gaming-actions {
   display: flex;
   align-items: center;
+  gap: 0.85rem;
 }
 
 .btn-theme-toggle {
@@ -970,4 +971,160 @@ select.form-gaming-input {
   margin: 0;
   text-align: right;
   word-break: break-word;
+}
+
+/* ============================================================
+   AVATAR (rond initiale / image)
+   ============================================================ */
+.avatar-gaming {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-hover));
+  color: var(--bg-main);
+  font-family: var(--font-title);
+  font-weight: 700;
+  line-height: 1;
+  overflow: hidden;
+  border: 2px solid var(--border-color-glow);
+  box-shadow: 0 0 8px var(--accent-gold-glow);
+  flex-shrink: 0;
+}
+.avatar-gaming-letter {
+  display: block;
+  transform: translateY(1px);
+}
+.avatar-gaming-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.navbar-gaming-avatar-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  border-radius: 50%;
+  transition: var(--transition-smooth);
+}
+.navbar-gaming-avatar-link:hover .avatar-gaming,
+.navbar-gaming-avatar-link:focus-visible .avatar-gaming {
+  box-shadow: 0 0 12px var(--accent-gold-glow);
+  border-color: var(--accent-gold-hover);
+}
+.navbar-gaming-avatar-link:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   PAGE COMPTE — layout 2 colonnes + onglets
+   ============================================================ */
+.compte-gaming-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+  width: 100%;
+}
+
+.compte-gaming-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.compte-gaming-sidebar {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  padding: 1.5rem 1rem;
+  position: sticky;
+  top: 90px;
+}
+
+.compte-gaming-identity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+.compte-gaming-pseudo {
+  font-family: var(--font-title);
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 1rem;
+  text-align: center;
+  word-break: break-word;
+}
+
+.compte-gaming-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.compte-gaming-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-md);
+  padding: 0.7rem 0.9rem;
+  font-family: var(--font-title);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+.compte-gaming-tab:hover {
+  color: var(--accent-gold-hover);
+  background: var(--bg-surface-alt);
+}
+.compte-gaming-tab.is-active {
+  color: var(--accent-gold);
+  background: var(--bg-surface-alt);
+  border-color: var(--border-color-glow);
+  box-shadow: inset 3px 0 0 var(--accent-gold);
+}
+.compte-gaming-tab:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+.compte-gaming-tab-icon {
+  font-size: 1rem;
+}
+
+.compte-gaming-content {
+  min-width: 0;
+}
+
+/* Responsive : colonnes empilées, sidebar non collante, onglets en ligne */
+@media (max-width: 768px) {
+  .compte-gaming-layout {
+    grid-template-columns: 1fr;
+  }
+  .compte-gaming-sidebar {
+    position: static;
+  }
+  .compte-gaming-tabs {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .compte-gaming-tab {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+  .compte-gaming-tab.is-active {
+    box-shadow: inset 0 -3px 0 var(--accent-gold);
+  }
 }

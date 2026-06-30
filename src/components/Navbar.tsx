@@ -2,9 +2,10 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../hooks/useTheme";
+import Avatar from "./Avatar";
 
 export default function Navbar() {
-  const { isConnected } = useAuth();
+  const { isConnected, pseudo } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -54,18 +55,12 @@ export default function Navbar() {
 
             {isConnected && (
               <li className="navbar-gaming-item">
-                <Link className="navbar-gaming-link" to="/mon-compte" onClick={closeNavbar}>Mon compte</Link>
-              </li>
-            )}
-
-            {isConnected && (
-              <li className="navbar-gaming-item">
                 <Link className="navbar-gaming-link navbar-gaming-link-logout" to="/deconnexion" onClick={closeNavbar}>Déconnexion</Link>
               </li>
             )}
           </ul>
 
-          {/* Sélecteur de thème */}
+          {/* Actions à droite : thème puis avatar compte (avatar tout à droite) */}
           <div className="navbar-gaming-actions">
             <button
               className="btn-theme-toggle"
@@ -81,6 +76,19 @@ export default function Navbar() {
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="moon-icon"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
               )}
             </button>
+
+            {/* Avatar compte : tout à droite, après le bouton de thème */}
+            {isConnected && (
+              <Link
+                className="navbar-gaming-avatar-link"
+                to="/mon-compte"
+                onClick={closeNavbar}
+                aria-label="Accéder à mon compte"
+                title="Mon compte"
+              >
+                <Avatar pseudo={pseudo} />
+              </Link>
+            )}
           </div>
         </div>
       </div>
