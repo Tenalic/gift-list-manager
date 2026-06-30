@@ -23,8 +23,7 @@ export default function Connexion() {
               Entrez vos identifiants pour accéder à vos listes de cadeaux
             </p>
           </header>
-          <h1>TEST</h1>
-          <h1>TEST2</h1>
+
           <form onSubmit={handleConnexion}>
             <div className="form-gaming-group">
               <label htmlFor="email" className="form-gaming-label">Email</label>
