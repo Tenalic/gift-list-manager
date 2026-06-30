@@ -1,0 +1,15 @@
+# Évite d'envoyer ces dossiers dans le contexte de build Docker
+# (plus rapide, et `npm ci` régénère node_modules dans l'image)
+node_modules
+dist
+dist-ssr
+.git
+.gitignore
+*.log
+.env.local
+.vscode
+.idea
+.DS_Store
+Dockerfile
+.dockerignore
+README.md
