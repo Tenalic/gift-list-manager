@@ -1,11 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { listeService } from "../services/listeService";
+import { useToast } from "./useToast";
 import type { DetailListeDto, CadeauDto } from "../types/liste";
 
 export const useListeDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { success, error: toastError, confirm } = useToast();
   const [liste, setListe] = useState<DetailListeDto | null>(null);
   const [loading, setLoading] = useState(true);
   const [erreur, setErreur] = useState("");
@@ -66,7 +68,7 @@ export const useListeDetail = () => {
       await listeService.toggleFavoris(liste.listeCadeaux.idListe);
       fetchListe();
     } catch {
-      alert("Erreur favoris");
+      toastError("Erreur favoris");
     }
   };
 
@@ -76,7 +78,7 @@ export const useListeDetail = () => {
       await listeService.updatePublique(liste.listeCadeaux.idListe, !liste.listeCadeaux.publique);
       fetchListe();
     } catch {
-      alert("Erreur de modification de la visibilité");
+      toastError("Erreur de modification de la visibilité");
     }
   };
 
@@ -85,17 +87,23 @@ export const useListeDetail = () => {
       await listeService.toggleOffrirCadeau(idObjet);
       fetchListe();
     } catch {
-      alert("Erreur action offrir");
+      toastError("Erreur action offrir");
     }
   };
 
   const handleDeleteObjet = async (idObjet: number) => {
-    if (!window.confirm("Supprimer cet objet ?")) return;
+    const confirmed = await confirm({
+      title: "Supprimer l'objet",
+      message: "Supprimer cet objet ?",
+      confirmLabel: "Supprimer",
+      danger: true,
+    });
+    if (!confirmed) return;
     try {
       await listeService.supprimerCadeau(idObjet);
       fetchListe();
     } catch {
-      alert("Erreur suppression");
+      toastError("Erreur suppression");
     }
   };
 
@@ -124,7 +132,7 @@ export const useListeDetail = () => {
       setShowModal(false);
       fetchListe();
     } catch {
-      alert("Erreur enregistrement");
+      toastError("Erreur enregistrement");
     }
   };
 
@@ -135,8 +143,8 @@ export const useListeDetail = () => {
   const copyLinkToClipboard = () => {
     if (!liste?.listeCadeaux?.urlPartage) return;
     navigator.clipboard.writeText(liste?.listeCadeaux?.urlPartage)
-      .then(() => alert("Lien copié dans le presse-papier !"))
-      .catch(() => alert("Erreur lors de la copie du lien"));
+      .then(() => success("Lien copié dans le presse-papier !"))
+      .catch(() => toastError("Erreur lors de la copie du lien"));
   };
 
   const startEditingNom = () => {
@@ -154,7 +162,7 @@ export const useListeDetail = () => {
       setIsEditingNom(false);
       fetchListe();
     } catch {
-      alert("Erreur lors de la modification du nom de la liste");
+      toastError("Erreur lors de la modification du nom de la liste");
     }
   };
 

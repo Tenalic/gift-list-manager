@@ -2,11 +2,13 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useListes } from "../hooks/useListes";
 import { useAuth } from "../context/AuthContext";
+import { useToast } from "../hooks/useToast";
 import { listeService } from "../services/listeService";
 
 export default function GiftList() {
   const { isConnected } = useAuth();
   const { listes, favoris, loading, erreur, refresh } = useListes();
+  const { error: toastError, confirm } = useToast();
 
   // État pour la modale de création
   const [showModal, setShowModal] = useState(false);
@@ -26,20 +28,26 @@ export default function GiftList() {
       setShowModal(false);
       refresh(); // On rafraîchit la vue pour voir la nouvelle liste
     } catch {
-      alert("Erreur lors de la création de la liste");
+      toastError("Erreur lors de la création de la liste");
     } finally {
       setCreationLoading(false);
     }
   };
 
   const handleSupprimerListe = async (idListe: number, nomListe: string) => {
-    if (!window.confirm(`Êtes-vous sûr de vouloir supprimer la liste "${nomListe}" ?`)) return;
+    const confirmed = await confirm({
+      title: "Supprimer la liste",
+      message: `Êtes-vous sûr de vouloir supprimer la liste "${nomListe}" ?`,
+      confirmLabel: "Supprimer",
+      danger: true,
+    });
+    if (!confirmed) return;
 
     try {
       await listeService.supprimerListe(idListe);
       refresh();
     } catch {
-      alert("Erreur lors de la suppression de la liste");
+      toastError("Erreur lors de la suppression de la liste");
     }
   };
 

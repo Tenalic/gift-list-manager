@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { ThemeProvider } from "./context/ThemeContext";
+import { ToastProvider } from "./context/ToastContext";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import MonCompte from "./pages/MonCompte";
@@ -25,6 +26,8 @@ function AppContent() {
   return (
     // AuthProvider enveloppe tout : isConnected sera accessible partout
     <AuthProvider>
+      {/* ToastProvider : notifications in-page accessibles depuis toutes les pages */}
+      <ToastProvider>
       {/* BrowserRouter active la navigation (comme les @GetMapping) */}
       <BrowserRouter>
 
@@ -58,6 +61,7 @@ function AppContent() {
         </div>
 
       </BrowserRouter>
+      </ToastProvider>
     </AuthProvider>
   );
 }

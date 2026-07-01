@@ -28,6 +28,7 @@ export function useConnexion() {
   const [emailOublie, setEmailOublie] = useState("");
   const [messageOublie, setMessageOublie] = useState("");
   const [erreurOublie, setErreurOublie] = useState("");
+  const [loadingOublie, setLoadingOublie] = useState(false);
 
 
   // Handler connexion : appelle le service, gère la réponse
@@ -57,6 +58,7 @@ export function useConnexion() {
     e.preventDefault();
     setMessageOublie("");
     setErreurOublie("");
+    setLoadingOublie(true);
 
     try {
       const result = await authService.motDePasseOublie({ email: emailOublie });
@@ -68,6 +70,8 @@ export function useConnexion() {
       }
     } catch {
       setErreurOublie("Impossible de contacter le serveur.");
+    } finally {
+      setLoadingOublie(false);
     }
   };
 
@@ -85,6 +89,7 @@ export function useConnexion() {
     emailOublie, setEmailOublie,
     messageOublie,
     erreurOublie,
+    loadingOublie,
     handleMotDePasseOublie,
   };
 }

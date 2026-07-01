@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useConnexion } from "../hooks/useConnexion";
 
 export default function Connexion() {
+  const [showPassword, setShowPassword] = useState(false);
   const {
     email, setEmail,
     password, setPassword,
@@ -10,6 +12,7 @@ export default function Connexion() {
     showModal, setShowModal,
     emailOublie, setEmailOublie,
     messageOublie, erreurOublie,
+    loadingOublie,
     handleMotDePasseOublie,
   } = useConnexion();
 
@@ -40,15 +43,40 @@ export default function Connexion() {
 
             <div className="form-gaming-group">
               <label htmlFor="password" className="form-gaming-label">Mot de passe</label>
-              <input
-                type="password"
-                id="password"
-                className="form-gaming-input"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                required
-              />
+              <div style={{ position: "relative" }}>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  className="form-gaming-input"
+                  style={{ paddingRight: "3rem" }}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                  aria-pressed={showPassword}
+                  title={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    right: "0.5rem",
+                    transform: "translateY(-50%)",
+                    background: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                    fontSize: "1.1rem",
+                    lineHeight: 1,
+                    padding: "0.4rem",
+                    color: "var(--text-secondary)",
+                  }}
+                >
+                  {showPassword ? "🙈" : "👁️"}
+                </button>
+              </div>
             </div>
 
             {erreur && (
@@ -135,8 +163,10 @@ export default function Connexion() {
                 </div>
                 
                 <div className="modal-gaming-footer">
-                  <button type="button" className="btn-gaming btn-gaming-secondary" onClick={() => setShowModal(false)}>Annuler</button>
-                  <button type="submit" className="btn-gaming btn-gaming-primary">Envoyer</button>
+                  <button type="button" className="btn-gaming btn-gaming-secondary" onClick={() => setShowModal(false)} disabled={loadingOublie}>Annuler</button>
+                  <button type="submit" className="btn-gaming btn-gaming-primary" disabled={loadingOublie}>
+                    {loadingOublie ? "Envoi..." : "Envoyer"}
+                  </button>
                 </div>
               </form>
             </div>
