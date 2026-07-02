@@ -34,7 +34,7 @@ export default function GiftList() {
     }
   };
 
-  const handleSupprimerListe = async (idListe: number, nomListe: string) => {
+  const handleSupprimerListe = async (shareToken: string, nomListe: string) => {
     const confirmed = await confirm({
       title: "Supprimer la liste",
       message: `Êtes-vous sûr de vouloir supprimer la liste "${nomListe}" ?`,
@@ -44,7 +44,7 @@ export default function GiftList() {
     if (!confirmed) return;
 
     try {
-      await listeService.supprimerListe(idListe);
+      await listeService.supprimerListe(shareToken);
       refresh();
     } catch {
       toastError("Erreur lors de la suppression de la liste");
@@ -116,7 +116,7 @@ export default function GiftList() {
         ) : (
           <div className="gaming-grid">
             {listes.map((liste) => (
-              <article key={liste.idListe} className="card-gaming" style={{ display: "flex", flexDirection: "column", justifyContent: "between", minHeight: "180px" }}>
+              <article key={liste.shareToken} className="card-gaming" style={{ display: "flex", flexDirection: "column", justifyContent: "between", minHeight: "180px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "start", marginBottom: "1rem" }}>
                   <h3 style={{ fontSize: "1.2rem", margin: 0, color: "var(--text-primary)" }}>{liste.nomListe}</h3>
                   <span className={`badge-gaming ${liste.publique ? 'badge-gaming-success' : 'badge-gaming-muted'}`}>
@@ -130,11 +130,11 @@ export default function GiftList() {
                 </div>
                 <div style={{ marginTop: "auto" }}>
                   <div className="btn-group-gaming">
-                    <Link to={`/liste/${liste.idListe}`} className="btn-gaming btn-gaming-secondary" style={{ padding: "0.4rem" }}>Gérer</Link>
+                    <Link to={`/liste/${liste.shareToken}`} className="btn-gaming btn-gaming-secondary" style={{ padding: "0.4rem" }}>Gérer</Link>
                     <button
                       className="btn-gaming btn-gaming-danger"
                       style={{ padding: "0.4rem" }}
-                      onClick={() => handleSupprimerListe(liste.idListe, liste.nomListe)}
+                      onClick={() => handleSupprimerListe(liste.shareToken, liste.nomListe)}
                     >
                       Supprimer
                     </button>
@@ -156,7 +156,7 @@ export default function GiftList() {
         ) : (
           <div className="gaming-grid">
             {favoris.map((liste) => (
-              <article key={liste.idListe} className="card-gaming" style={{ display: "flex", flexDirection: "column", minHeight: "180px" }}>
+              <article key={liste.shareToken} className="card-gaming" style={{ display: "flex", flexDirection: "column", minHeight: "180px" }}>
                 <div style={{ marginBottom: "1rem" }}>
                   <h3 style={{ fontSize: "1.2rem", margin: 0, color: "var(--text-primary)" }}>{liste.nomListe}</h3>
                   <p className="home-gaming-text-small" style={{ margin: "0.25rem 0 0 0", color: "var(--text-muted)" }}>
@@ -169,7 +169,7 @@ export default function GiftList() {
                   </span>
                 </div>
                 <div style={{ marginTop: "auto" }}>
-                  <Link to={`/liste/${liste.idListe}`} className="btn-gaming btn-gaming-outline w-100" style={{ padding: "0.4rem" }}>
+                  <Link to={`/liste/${liste.shareToken}`} className="btn-gaming btn-gaming-outline w-100" style={{ padding: "0.4rem" }}>
                     Voir la liste
                   </Link>
                 </div>

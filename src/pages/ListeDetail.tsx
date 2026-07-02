@@ -60,7 +60,7 @@ export default function ListeDetail() {
           <span style={{ fontSize: "1.25rem" }}>🛡️</span>
           <div>
             <strong>Mode Invité :</strong> Vous consultez cette liste en tant qu'invité.
-            <Link to={`/connexion?redirect=/liste/${liste?.listeCadeaux?.idListe}`} className="link-gaming" style={{ margin: "0 0.25rem", fontWeight: "bold" }}>Connectez-vous</Link>
+            <Link to={`/connexion?redirect=/liste/${liste?.listeCadeaux?.shareToken}`} className="link-gaming" style={{ margin: "0 0.25rem", fontWeight: "bold" }}>Connectez-vous</Link>
             pour pouvoir offrir des cadeaux et participer !
           </div>
         </div>
@@ -216,7 +216,7 @@ export default function ListeDetail() {
                     style={{ padding: "0.5rem" }}
                     onClick={() => {
                       if (!isConnected) {
-                        navigate(`/connexion?redirect=/liste/${liste.idListe}`);
+                        navigate(`/connexion?redirect=/liste/${liste.listeCadeaux?.shareToken}`);
                       } else if (objet.idObjet) {
                         handleToggleOffrir(objet.idObjet);
                       }

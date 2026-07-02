@@ -51,7 +51,7 @@ function AppContent() {
               {/* Ancienne route conservée : redirige vers la page Mon compte */}
               <Route path="/modifier-mot-de-passe" element={<Navigate to="/mon-compte" replace />} />
               <Route path="/mes-listes" element={<GiftList />} />
-              <Route path="/liste/:id" element={<ListeDetail />} />
+              <Route path="/liste/:token" element={<ListeDetail />} />
               <Route path="/listes-publiques" element={<PublicLists />} />
             </Routes>
           </div>

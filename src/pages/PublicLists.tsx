@@ -92,7 +92,7 @@ export default function PublicLists() {
         <div className="gaming-grid">
           {listes?.lisOfListesCadeaux?.map((liste) => (
             <article 
-              key={liste.idListe} 
+              key={liste.shareToken}
               className="card-gaming"
               style={{ display: "flex", flexDirection: "column", minHeight: "180px" }}
             >
@@ -109,7 +109,7 @@ export default function PublicLists() {
                 <span style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>
                   🎁 {liste.nombreObjet || 0} cadeau(x)
                 </span>
-                <Link to={`/liste/${liste.idListe}`} className="btn-gaming btn-gaming-outline" style={{ padding: "0.4rem 0.8rem", fontSize: "0.75rem" }}>
+                <Link to={`/liste/${liste.shareToken}`} className="btn-gaming btn-gaming-outline" style={{ padding: "0.4rem 0.8rem", fontSize: "0.75rem" }}>
                   Voir la liste &rarr;
                 </Link>
               </div>

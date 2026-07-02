@@ -14,7 +14,7 @@ export interface CadeauDto {
 }
 
 export interface ListeDto {
-  idListe: number;
+  shareToken: string;
   nomListe: string;
   proprietaire: string;
   partagee: boolean;

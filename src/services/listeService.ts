@@ -35,8 +35,8 @@ export const listeService = {
     if (!response.ok) throw new Error("Erreur lors de la création");
   },
 
-  async updatePublique(idListe: number, publique: boolean): Promise<void> {
-    const response = await fetch(`${API_BASE_URL}/api/liste/${idListe}/publique`, {
+  async updatePublique(shareToken: string, publique: boolean): Promise<void> {
+    const response = await fetch(`${API_BASE_URL}/api/liste/${shareToken}/publique`, {
       method: "PUT",
       headers: getHeaders(),
       credentials: "include",
@@ -45,8 +45,8 @@ export const listeService = {
     if (!response.ok) throw new Error("Erreur de modification de la visibilité");
   },
 
-  async modifierNom(idListe: number, nomListe: string): Promise<void> {
-    const response = await fetch(`${API_BASE_URL}/api/liste/${idListe}/nom`, {
+  async modifierNom(shareToken: string, nomListe: string): Promise<void> {
+    const response = await fetch(`${API_BASE_URL}/api/liste/${shareToken}/nom`, {
       method: "PUT",
       headers: getHeaders(),
       credentials: "include",
@@ -67,8 +67,8 @@ export const listeService = {
     return response.json();
   },
 
-  async supprimerListe(idListe: number): Promise<void> {
-    const response = await fetch(`${API_BASE_URL}/api/liste/${idListe}`, {
+  async supprimerListe(shareToken: string): Promise<void> {
+    const response = await fetch(`${API_BASE_URL}/api/liste/${shareToken}`, {
       method: "DELETE",
       headers: { "Accept-Language": navigator.language.split("-")[0] },
       credentials: "include",
@@ -76,8 +76,8 @@ export const listeService = {
     if (!response.ok) throw new Error("Erreur lors de la suppression");
   },
 
-  async getUneListe(idListe: number): Promise<DetailListeDto> {
-    const response = await fetch(`${API_BASE_URL}/api/liste/${idListe}`, {
+  async getUneListe(shareToken: string): Promise<DetailListeDto> {
+    const response = await fetch(`${API_BASE_URL}/api/liste/${shareToken}`, {
       method: "GET",
       headers: getHeaders(),
       credentials: "include",
@@ -86,8 +86,8 @@ export const listeService = {
     return response.json();
   },
 
-  async ajouterCadeau(idListe: number, objet: CadeauDto): Promise<void> {
-    const response = await fetch(`${API_BASE_URL}/api/liste/${idListe}/cadeau`, {
+  async ajouterCadeau(shareToken: string, objet: CadeauDto): Promise<void> {
+    const response = await fetch(`${API_BASE_URL}/api/liste/${shareToken}/cadeau`, {
       method: "POST",
       headers: getHeaders(),
       credentials: "include",
@@ -115,8 +115,8 @@ export const listeService = {
     if (!response.ok) throw new Error("Erreur de suppression");
   },
 
-  async toggleFavoris(idListe: number): Promise<void> {
-    const response = await fetch(`${API_BASE_URL}/api/liste/${idListe}/favoris`, {
+  async toggleFavoris(shareToken: string): Promise<void> {
+    const response = await fetch(`${API_BASE_URL}/api/liste/${shareToken}/favoris`, {
       method: "POST",
       headers: { "Accept-Language": navigator.language.split("-")[0] },
       credentials: "include",

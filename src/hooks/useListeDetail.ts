@@ -5,7 +5,7 @@ import { useToast } from "./useToast";
 import type { DetailListeDto, CadeauDto } from "../types/liste";
 
 export const useListeDetail = () => {
-  const { id } = useParams<{ id: string }>();
+  const { token } = useParams<{ token: string }>();
   const navigate = useNavigate();
   const { success, error: toastError, confirm } = useToast();
   const [liste, setListe] = useState<DetailListeDto | null>(null);
@@ -44,18 +44,18 @@ export const useListeDetail = () => {
   };
 
   const fetchListe = useCallback(async () => {
-    if (!id) return;
+    if (!token) return;
     try {
       await Promise.resolve();
       setLoading(true);
-      const data = await listeService.getUneListe(parseInt(id));
+      const data = await listeService.getUneListe(token);
       setListe(data);
     } catch (err) {
       setErreur(err instanceof Error ? err.message : "Erreur de chargement");
     } finally {
       setLoading(false);
     }
-  }, [id]);
+  }, [token]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -65,7 +65,7 @@ export const useListeDetail = () => {
   const handleToggleFavoris = async () => {
     if (!liste || !liste.listeCadeaux) return;
     try {
-      await listeService.toggleFavoris(liste.listeCadeaux.idListe);
+      await listeService.toggleFavoris(liste.listeCadeaux.shareToken);
       fetchListe();
     } catch {
       toastError("Erreur favoris");
@@ -75,7 +75,7 @@ export const useListeDetail = () => {
   const handleTogglePublique = async () => {
     if (!liste || !liste.listeCadeaux) return;
     try {
-      await listeService.updatePublique(liste.listeCadeaux.idListe, !liste.listeCadeaux.publique);
+      await listeService.updatePublique(liste.listeCadeaux.shareToken, !liste.listeCadeaux.publique);
       fetchListe();
     } catch {
       toastError("Erreur de modification de la visibilité");
@@ -122,12 +122,12 @@ export const useListeDetail = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!id) return;
+    if (!token) return;
     try {
       if (editingObjet) {
         await listeService.modifierCadeau(formData);
       } else {
-        await listeService.ajouterCadeau(parseInt(id), formData);
+        await listeService.ajouterCadeau(token, formData);
       }
       setShowModal(false);
       fetchListe();
@@ -158,7 +158,7 @@ export const useListeDetail = () => {
     if (!liste?.listeCadeaux) return;
     if (!nom.trim()) return;
     try {
-      await listeService.modifierNom(liste.listeCadeaux.idListe, nom.trim());
+      await listeService.modifierNom(liste.listeCadeaux.shareToken, nom.trim());
       setIsEditingNom(false);
       fetchListe();
     } catch {
