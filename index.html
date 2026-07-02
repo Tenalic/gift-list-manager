@@ -1,10 +1,29 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>gift-list-manager</title>
+
+    <!-- PWA : permet l'installation « Ajouter à l'écran d'accueil » sur Android -->
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <!-- Couleur de la barre système en mode application (thème marron/doré) -->
+    <meta name="theme-color" content="#8b5e34" />
+    <!-- Icône pour l'ajout à l'écran d'accueil iOS (Safari ignore le SVG :
+         à remplacer idéalement par un PNG 180×180, cf. note plus bas) -->
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Gift List" />
+    <!--
+      Titre & description de secours (fallback) présents dans le HTML statique,
+      lus par les crawlers avant l'exécution du JS. React 19 les remplace
+      ensuite par les balises définies dans chaque page (cf. Home.tsx).
+    -->
+    <title>Gift List — Créez et partagez vos listes de cadeaux</title>
+    <meta
+      name="description"
+      content="Créez, gérez et partagez facilement vos listes de cadeaux pour Noël, anniversaires et occasions spéciales. Simplifiez vos préparatifs avec Gift List."
+    />
   </head>
   <body>
     <div id="root"></div>
