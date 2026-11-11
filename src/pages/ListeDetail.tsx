@@ -1,6 +1,7 @@
 import { useListeDetail } from "../hooks/useListeDetail";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
+import { getNombreCoeurs } from "../utils/priority";
 
 export default function ListeDetail() {
   const { isConnected, pseudo } = useAuth();
@@ -168,11 +169,24 @@ export default function ListeDetail() {
                 <h3 style={{ fontSize: "1.25rem", margin: 0, color: "var(--text-primary)" }}>{objet.titre}</h3>
                 
                 {/* Priorité sous forme de coeurs */}
-                <span title={`Priorité: ${objet.priorite}`}>
-                  {Array.from({ length: 6 - (parseInt(objet.priorite, 10) || 5) }).map((_, i) => (
-                    <span key={i} style={{ color: "var(--danger)" }}>❤️</span>
-                  ))}
-                </span>
+                <span
+  title={`Niveau d'intérêt : ${objet.priorite} sur 5`}
+  style={{
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "5px",
+    padding: "3px 8px",
+    borderRadius: "12px",
+    border: "1px solid var(--border, #999999)",
+    color: "var(--text-primary, #222222)",
+    fontSize: "13px",
+    fontWeight: 700,
+    whiteSpace: "nowrap"
+  }}
+>
+  <span>{objet.priorite}</span>
+</span>
               </div>
 
               <p className="home-gaming-text-small" style={{ color: "var(--text-secondary)", marginBottom: "1rem", flexGrow: 1 }}>
