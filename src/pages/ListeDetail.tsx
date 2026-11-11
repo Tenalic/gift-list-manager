@@ -1,7 +1,6 @@
 import { useListeDetail } from "../hooks/useListeDetail";
 import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
-import { getNombreCoeurs } from "../utils/priority";
 
 export default function ListeDetail() {
   const { isConnected, pseudo } = useAuth();
